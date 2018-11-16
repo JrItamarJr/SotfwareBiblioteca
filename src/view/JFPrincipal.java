@@ -135,9 +135,9 @@ public class JFPrincipal extends javax.swing.JFrame {
     private void jMLivroActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jMLivroActionPerformed
         
         // Abre a janela
-        new JFLivro(this).setVisible(true);
-        
-        this.setEnabled(false);
+        JILivro jiLivro = new JILivro();
+        jDesktopPane1.add(jiLivro);
+        jiLivro.show();
         
     }//GEN-LAST:event_jMLivroActionPerformed
 
