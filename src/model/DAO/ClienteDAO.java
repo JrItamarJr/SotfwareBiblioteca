@@ -8,7 +8,12 @@ package model.DAO;
 import Controller.Conexao;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
+import java.sql.ResultSet;
 import java.sql.SQLException;
+import java.util.ArrayList;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
 import model.Beam.Cliente;
 
@@ -42,4 +47,107 @@ public class ClienteDAO {
             JOptionPane.showMessageDialog(null, "Erro ao Salvar " + e);
         }
     }
+    public List<Cliente> readTable() {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Cliente> clientes = new ArrayList<>();
+        try {
+            stmt = con.prepareStatement("SELECT * FROM cliente;");
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(rs.getInt("idCliente"));
+                cliente.setNome(rs.getString("nomeCliente"));
+                cliente.setFone(rs.getString("telefoneCliente"));
+                cliente.setCpf(rs.getString("cpfCliente"));
+                cliente.setSexo(rs.getString("sexo"));
+                cliente.setEndereco(rs.getString("enderecoCliente"));
+                clientes.add(cliente);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDAO.class.getName())  
+                    .log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+        return clientes;  
+    }
+
+    public List<Cliente> readTableForDesc(String desc) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<Cliente> clientes = new ArrayList<>();
+        try {
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE nomeCliente LIKE ?");
+            stmt.setString(1, "%" + desc + "%"); 
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                Cliente cliente = new Cliente();
+                cliente.setId(rs.getInt("idCliente"));
+                cliente.setNome(rs.getString("nomeCliente"));
+                cliente.setFone(rs.getString("telefoneCliente"));
+                cliente.setCpf(rs.getString("cpfCliente"));
+                cliente.setSexo(rs.getString("sexo"));
+                cliente.setEndereco(rs.getString("enderecoCliente"));
+                clientes.add(cliente);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDAO.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+        return clientes;
+    }
+
+    public void update(Cliente cli) {
+        // utilizar a classe que me permite executar sql
+        PreparedStatement stmt = null;
+        try {
+            // digitar o comando UPDATE
+            stmt = con.prepareStatement("UPDATE cliente SET nomeCliente = ?, telefoneCliente = ?, emailCliente = ?, enderecoCliente = ?, cpfCliente = ?, sexo = ?, dt_nascimentoCliente = ? WHERE idCliente = ?");
+            
+            stmt.setString(1, cli.getNome());
+            stmt.setString(2, cli.getFone());
+            stmt.setString(3, cli.getEmail());
+            stmt.setString(4, cli.getEndereco());
+            stmt.setString(5, cli.getCpf());
+            stmt.setString(6, cli.getSexo());
+            stmt.setString(7, cli.getDataNasc());
+            stmt.setInt(8, cli.getId());
+            stmt.executeUpdate();
+
+            // executar esse sql
+            stmt.executeUpdate();
+
+            // mensagem informando que atualizou            
+            JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao atualizar" + ex);
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
+
+    public void delete(Cliente cli) {
+        // utilizar a classe que me permite executar sql
+        PreparedStatement stmt = null;
+        try {
+            // digitar o comando delete
+            stmt = con.prepareStatement("DELETE FROM cliente WHERE idCliente = ?");
+            stmt.setInt(1, cli.getId());
+            // executar esse sql
+            stmt.executeUpdate();
+
+            JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso!");           
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir" + ex);
+        } finally {
+            Conexao.closeConnection(con, stmt); 
+        }
+    }  
+
 }

@@ -9,6 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import model.Beam.Cliente;
 import model.DAO.ClienteDAO;
 import utils.BdCliente;
@@ -24,7 +25,10 @@ public class JICliente extends javax.swing.JInternalFrame {
      */
     public JICliente() {
         initComponents();
-       desabilitaCampos();
+        DefaultTableModel modelo = (DefaultTableModel) JTCliente.getModel();
+        JTCliente.setRowSorter(new TableRowSorter(modelo));
+        readTable();
+        desabilitaCampos();
     }
 
     /**
@@ -39,15 +43,13 @@ public class JICliente extends javax.swing.JInternalFrame {
         jPanel2 = new javax.swing.JPanel();
         jTPesquisar = new javax.swing.JTextField();
         jBPesquisar = new javax.swing.JButton();
-        jScrollPane1 = new javax.swing.JScrollPane();
-        jTablePesquisa = new javax.swing.JTable();
         jLabel8 = new javax.swing.JLabel();
         jPanel3 = new javax.swing.JPanel();
-        jTPesquisar1 = new javax.swing.JTextField();
         jBPesquisar1 = new javax.swing.JButton();
         jScrollPane2 = new javax.swing.JScrollPane();
-        tmCleinte = new javax.swing.JTable();
+        JTCliente = new javax.swing.JTable();
         jLabel9 = new javax.swing.JLabel();
+        txtPesquisa = new javax.swing.JTextField();
         jPanel1 = new javax.swing.JPanel();
         jLabel1 = new javax.swing.JLabel();
         jLabel2 = new javax.swing.JLabel();
@@ -78,14 +80,6 @@ public class JICliente extends javax.swing.JInternalFrame {
             }
         });
 
-        jTablePesquisa.setModel(tmCliente);
-        jTablePesquisa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTablePesquisaMouseClicked(evt);
-            }
-        });
-        jScrollPane1.setViewportView(jTablePesquisa);
-
         jLabel8.setText("Nome:");
 
         javax.swing.GroupLayout jPanel2Layout = new javax.swing.GroupLayout(jPanel2);
@@ -94,14 +88,11 @@ public class JICliente extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jScrollPane1)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addComponent(jLabel8)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                        .addComponent(jTPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
-                        .addGap(49, 49, 49)
-                        .addComponent(jBPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                .addComponent(jLabel8)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addComponent(jTPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addGap(49, 49, 49)
+                .addComponent(jBPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 126, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap())
         );
         jPanel2Layout.setVerticalGroup(
@@ -111,8 +102,6 @@ public class JICliente extends javax.swing.JInternalFrame {
                     .addComponent(jBPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 44, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jTPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
-                .addGap(8, 8, 8)
-                .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 195, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -125,8 +114,6 @@ public class JICliente extends javax.swing.JInternalFrame {
         jPanel3.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Cliente", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Century Gothic", 0, 12))); // NOI18N
         jPanel3.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        jTPesquisar1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-
         jBPesquisar1.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jBPesquisar1.setText("Pesquisar");
         jBPesquisar1.addActionListener(new java.awt.event.ActionListener() {
@@ -135,17 +122,54 @@ public class JICliente extends javax.swing.JInternalFrame {
             }
         });
 
-        tmCleinte.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        tmCleinte.setModel(tmCliente);
-        tmCleinte.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                tmCleinteMouseClicked(evt);
+        JTCliente.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        JTCliente.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Nome", "Telefone", "CPF", "Sexo", "Endereço", "Email", "Data Nascimento"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
             }
         });
-        jScrollPane2.setViewportView(tmCleinte);
+        JTCliente.addMouseListener(new java.awt.event.MouseAdapter() {
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                JTClienteMouseReleased(evt);
+            }
+        });
+        jScrollPane2.setViewportView(JTCliente);
+        if (JTCliente.getColumnModel().getColumnCount() > 0) {
+            JTCliente.getColumnModel().getColumn(0).setResizable(false);
+            JTCliente.getColumnModel().getColumn(0).setPreferredWidth(30);
+            JTCliente.getColumnModel().getColumn(1).setResizable(false);
+            JTCliente.getColumnModel().getColumn(1).setPreferredWidth(150);
+            JTCliente.getColumnModel().getColumn(2).setResizable(false);
+            JTCliente.getColumnModel().getColumn(2).setPreferredWidth(70);
+            JTCliente.getColumnModel().getColumn(3).setResizable(false);
+            JTCliente.getColumnModel().getColumn(3).setPreferredWidth(70);
+            JTCliente.getColumnModel().getColumn(4).setResizable(false);
+            JTCliente.getColumnModel().getColumn(4).setPreferredWidth(50);
+            JTCliente.getColumnModel().getColumn(5).setResizable(false);
+            JTCliente.getColumnModel().getColumn(5).setPreferredWidth(150);
+            JTCliente.getColumnModel().getColumn(6).setResizable(false);
+            JTCliente.getColumnModel().getColumn(7).setResizable(false);
+        }
 
         jLabel9.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel9.setText("Nome:");
+
+        txtPesquisa.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtPesquisaKeyReleased(evt);
+            }
+        });
 
         javax.swing.GroupLayout jPanel3Layout = new javax.swing.GroupLayout(jPanel3);
         jPanel3.setLayout(jPanel3Layout);
@@ -158,8 +182,8 @@ public class JICliente extends javax.swing.JInternalFrame {
                     .addGroup(jPanel3Layout.createSequentialGroup()
                         .addComponent(jLabel9)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTPesquisar1)
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(txtPesquisa)
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                         .addComponent(jBPesquisar1, javax.swing.GroupLayout.PREFERRED_SIZE, 112, javax.swing.GroupLayout.PREFERRED_SIZE)))
                 .addContainerGap())
         );
@@ -169,8 +193,8 @@ public class JICliente extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel9)
-                    .addComponent(jTPesquisar1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                    .addComponent(jBPesquisar1))
+                    .addComponent(jBPesquisar1)
+                    .addComponent(txtPesquisa, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addGap(9, 9, 9)
                 .addComponent(jScrollPane2, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
                 .addContainerGap())
@@ -253,10 +277,10 @@ public class JICliente extends javax.swing.JInternalFrame {
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(txtEndereco)
                             .addGroup(jPanel1Layout.createSequentialGroup()
                                 .addComponent(txtCPF, javax.swing.GroupLayout.PREFERRED_SIZE, 166, javax.swing.GroupLayout.PREFERRED_SIZE)
-                                .addGap(0, 0, Short.MAX_VALUE))
-                            .addComponent(txtEndereco))))
+                                .addGap(0, 0, Short.MAX_VALUE)))))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -280,7 +304,7 @@ public class JICliente extends javax.swing.JInternalFrame {
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(txtEndereco, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5))
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(26, Short.MAX_VALUE))
         );
 
         jBAlterar.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
@@ -398,71 +422,63 @@ public class JICliente extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisarActionPerformed
-        try {
-            listaContatos();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Problemas ao listar contatos.");
-        }
+
     }//GEN-LAST:event_jBPesquisarActionPerformed
 
-    private void jTablePesquisaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePesquisaMouseClicked
-        // Salva a posição da linha selecionada na tabela de pesquisa
-        int linhaSelecionada = jTablePesquisa.getSelectedRow();
-
-        txtNome.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 1));
-        txtData.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 2));
-        cbSexo.setSelectedItem((String) jTablePesquisa.getValueAt(linhaSelecionada, 3));
-        txtCPF.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 4));
-        txtEndereco.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 5));
-        txtFone.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 6));
-
-        // Ao selecionar um registro, os campos são ativados possibilitando fazer alterações
-        habilitaCampos();
-    }//GEN-LAST:event_jTablePesquisaMouseClicked
-
     private void jBPesquisar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisar1ActionPerformed
-//        // Ao clicar em pesquisar, é executado o método que efetua a pesquisa, e outro método que exibe a lista da pesquisa
-        try {
-            listaContatos();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Problemas ao listar contatos.");
-        }
+
     }//GEN-LAST:event_jBPesquisar1ActionPerformed
 
-    private void tmCleinteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_tmCleinteMouseClicked
-        // Salva a posição da linha selecionada na tabela de pesquisa
-        int linhaSelecionada = jTablePesquisa.getSelectedRow();
-
-        txtNome.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 1));
-        txtData.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 2));
-        cbSexo.setSelectedItem((String) jTablePesquisa.getValueAt(linhaSelecionada, 3));
-        txtCPF.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 4));
-        txtEndereco.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 5));
-        txtFone.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 6));
-
-        // Ao selecionar um registro, os campos são ativados possibilitando fazer alterações
-        habilitaCampos();
-    }//GEN-LAST:event_tmCleinteMouseClicked
-
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
-        try {
-            excluirRegistro();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao excluir registro.");
+
+        if (JTCliente.getSelectedRow() != -1) {// se JTprodutos estiver algo selecionado
+            Cliente cli = new Cliente();
+            ClienteDAO cliDAO = new ClienteDAO();// instancia a classe para execução do script
+            cli.setId((int) JTCliente.getValueAt(JTCliente.getSelectedRow(), 0));
+            cliDAO.delete(cli);//metódo para executar o delete
+            
+            txtCPF.setText("");
+            txtData.setText("");
+            txtEndereco.setText("");
+            txtFone.setText("");
+            txtNome.setText("");
+            readTable();
+
+        } else {
+            JOptionPane.showMessageDialog(null, "Selecione um produto para excluir");
         }
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
-        try {
-            alteraRegistro();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao alterar registro.");
+        if (JTCliente.getSelectedRow() != -1) {
+            Cliente cli = new Cliente();
+            ClienteDAO cliDAO = new ClienteDAO();
+            cli.setNome(txtNome.getText());
+            cli.setCpf(txtCPF.getText());
+            cli.setDataNasc(txtData.getText());
+            cli.setFone(txtFone.getText());
+            cli.setEndereco(txtEndereco.getText());
+            cli.setSexo(cbSexo.getSelectedItem().toString());
+            cli.setId((int) JTCliente.getValueAt(JTCliente.getSelectedRow(), 0));// serve para capturar o ID da linha selecionada
+            cliDAO.update(cli);
+
+            txtCPF.setText("");
+            txtData.setText("");
+            txtEndereco.setText("");
+            txtFone.setText("");
+            txtNome.setText("");
+            cbSexo.setSelectedIndex(-1);
+
+            readTable();
+        }
+        else{
+            JOptionPane.showMessageDialog(null, "Selecione um cliente para atualizar!");
         }
     }//GEN-LAST:event_jBAlterarActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
         habilitaCampos();
-        limpaCampos();
+        
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
@@ -475,192 +491,43 @@ public class JICliente extends javax.swing.JInternalFrame {
         cli.setEndereco(txtEndereco.getText());
         cli.setSexo(cbSexo.getSelectedItem().toString());
         cliDAO.create(cli);
-        
+        txtCPF.setText("");
+        txtData.setText("");
+        txtEndereco.setText("");
+        txtFone.setText("");
+        txtNome.setText("");
+        cbSexo.setSelectedIndex(-1);
+        readTable();
+
     }//GEN-LAST:event_jBCadastrarActionPerformed
 
     private void jBSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_jBSairActionPerformed
 
-    /* ----CADASTRO-> */
-    // MÉTODOS:
-    
-    // Método p/ cadastrar um registro no banco de dados.
-    
-    
-    // Método p/ validação do formulário
-    private boolean verificaDados() {
-        if ((!txtNome.getText().equals("")) && (!txtData.getText().equals("")) 
-                && (!cbSexo.getSelectedItem().equals("")) && (!txtCPF.getText().equals(""))
-                && (!txtEndereco.getText().equals(""))) {            
-            return true;
-        }
-        JOptionPane.showMessageDialog(rootPane, "Dados imcompletos.");
-        return false;
-    }
-    
-    // Método p/ concatenar a data
-//    private String data() {
-//        String d = jT2DataAno.getText() + "-" + jT2DataMes.getText() + "-" + jT2DataDia.getText();
-//        
-//        return d;
-//    }
-    /* <-CADASTRO---- */ 
-    
-    
-    
-    
-    /* ----PESQUISA-> */
-    // MÉTODOS:
-    
-    // Edita os campos e colunas da tabela de resultados
-    DefaultTableModel tmCliente = new DefaultTableModel(null, new String[]{"Id", "Nome", "Data Nasc.", "Sexo", "CPF", "Endereço", "Fone"});
-    List<Cliente> clientes;
-        
-    
-    // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
-    private void listaContatos() throws SQLException {
-        limpaCampos();
-        BdCliente d = new BdCliente();
-        clientes = d.getLista("%" + jTPesquisar.getText() + "%"); 
-        
-        // Após pesquisar os contatos, executa o método p/ exibir o resultado na tabela pesquisa
-        mostraPesquisa(clientes);
-        clientes.clear();
-    }
-    
-    // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisa(List<Cliente> clientes) {
-        // Limpa a tabela sempre que for solicitado uma nova pesquisa
-        limparTabela();
-        
-        if (clientes.isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Nenhum registro não encontrado.");
-        } else {            
-            // Linha em branco usada no for, para cada registro é criada uma nova linha 
-            String[] linha = new String[] {null, null, null, null, null, null, null};
-            // P/ cada registro é criada uma nova linha, cada recebe linha os campos do registro
-            for (int i = 0; i < clientes.size(); i++) {
-                tmCliente.addRow(linha);
-                tmCliente.setValueAt(clientes.get(i).getId(), i, 0);
-                tmCliente.setValueAt(clientes.get(i).getNome(), i, 1);
-                tmCliente.setValueAt(clientes.get(i).getDataNasc(), i, 2);
-                tmCliente.setValueAt(clientes.get(i).getSexo(), i, 3);
-                tmCliente.setValueAt(clientes.get(i).getCpf(), i, 4);
-                tmCliente.setValueAt(clientes.get(i).getEndereco(), i, 5);
-                tmCliente.setValueAt(clientes.get(i).getFone(), i, 6);                
-            }            
-        }
-    }
-    
-    // Limpa a tabela de resultados
-    private void limparTabela() {       
-        while (tmCliente.getRowCount() > 0) {            
-            tmCliente.removeRow(0);
-        }
-    } 
-    /* <-PESQUISA---- */      
-    
-    
-    
-    /* ----EXCLUIR-> */
-    // MÉTODOS:
-    
-    // Exclui resgistro
-    private void excluirRegistro() throws SQLException {
-        // Se algum registro estiver selecionado
-        if (jTablePesquisa.getSelectedRow() != -1) {
-            // Exibe uma janela de confirmação antes de exluir o registro
-            int resp = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente excluir este registro?",
-                    "Confirmação!", JOptionPane.YES_NO_OPTION);
+    private void txtPesquisaKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtPesquisaKeyReleased
+        // TODO add your handling code here:
+        readTableForDesc(txtPesquisa.getText());
+    }//GEN-LAST:event_txtPesquisaKeyReleased
 
-            // Se a confirmação for SIM
-            if (resp == JOptionPane.YES_NO_OPTION) {
-                // Recebe a linha selecionada
-                int linhaSelecionada = jTablePesquisa.getSelectedRow();
-                // Recebe o ID da linha selecionada
-                int id = (int) jTablePesquisa.getValueAt(linhaSelecionada, 0);
-                // Remove o registro, usando como parâmetro, o id da linha selecionada                
-                BdCliente d = new BdCliente();
-                d.remove(id);
+    private void JTClienteMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTClienteMouseReleased
+        // TODO add your handling code here:
+        if (JTCliente.getSelectedRow() != -1) {
+            
+            txtNome.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 1).toString());
+            txtFone.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 2).toString());
+            txtCPF.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 3).toString());
+            cbSexo.setSelectedItem(JTCliente.getValueAt(JTCliente.getSelectedRow(), 4).toString());
+            txtEndereco.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 5).toString());
+            txtData.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 7).toString());
 
-                JOptionPane.showMessageDialog(rootPane, "Registro excluido com sucesso.");
-                limpaCampos();
-                desabilitaCampos();
-            }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Registro não selecionado.");
         }
-    }
-    /* <-EXCLUIR---- */
-    
-    
-    
-    
-    /* ----ALTERAR-> */
-    // MÉTODOS:
-    
-    // Altera registro
-    private void alteraRegistro() throws SQLException {
-        if (jTablePesquisa.getSelectedRow() != -1) {
-            int resp = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente alterar este registro?",
-                    "Confirmação!", JOptionPane.YES_NO_OPTION);
+    }//GEN-LAST:event_JTClienteMouseReleased
 
-            // Se a confirmação for SIM
-            if (resp == JOptionPane.YES_NO_OPTION) {                
-                Cliente c = new Cliente();
-                BdCliente d = new BdCliente();
-                
-                c.setNome(txtNome.getText());
-                c.setCpf(txtCPF.getText());                
-                c.setEndereco(txtEndereco.getText());
-                c.setFone(txtFone.getText());         
-
-                d.altera(c);
-                
-                JOptionPane.showMessageDialog(rootPane, "Registro alterado com sucesso.");
-                limpaCampos();
-                desabilitaCampos();
-                listaContatos();
-            }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Registro não selecionado.");
-        }
-    }
-    /* <-ALTERAR---- */
     
-    
-    
-    
-    /* ----OUTROS-> */
-    // MÉTODOS:
-    
-    // Limpa os campos do formulário
-    private void limpaCampos() {
-        txtNome.setText("");
-        txtCPF.setText("");
-        txtEndereco.setText("");
-        txtFone.setText(""); 
-    }
-    
-    // Desabilita os campos do formulário
-    private void desabilitaCampos() {
-        txtNome.setEditable(false);
-        txtCPF.setEditable(false);
-        txtEndereco.setEditable(false);
-        txtFone.setEditable(false);
-    }
-    
-    // Habilita os campos do formulário
-    private void habilitaCampos() {
-        
-        txtNome.setEditable(true);
-        txtCPF.setEditable(true);
-        txtEndereco.setEditable(true);
-        txtFone.setEditable(true);
-    }
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JTable JTCliente;
     private javax.swing.JComboBox<String> cbSexo;
     private javax.swing.JButton jBAlterar;
     private javax.swing.JButton jBCadastrar;
@@ -682,16 +549,71 @@ public class JICliente extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel4;
     private javax.swing.JPanel jPanel5;
-    private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JTextField jTPesquisar;
-    private javax.swing.JTextField jTPesquisar1;
-    private javax.swing.JTable jTablePesquisa;
-    private javax.swing.JTable tmCleinte;
     private javax.swing.JFormattedTextField txtCPF;
     private javax.swing.JFormattedTextField txtData;
     private javax.swing.JTextField txtEndereco;
     private javax.swing.JFormattedTextField txtFone;
     private javax.swing.JTextField txtNome;
+    private javax.swing.JTextField txtPesquisa;
     // End of variables declaration//GEN-END:variables
+public void readTable() {
+        DefaultTableModel modelo = (DefaultTableModel) JTCliente.getModel();
+        modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
+        //metodos para preencher as tabelas
+        ClienteDAO cliDAO = new ClienteDAO();
+        // metodo para trazer os produtos e adicionar as linhas
+        for (Cliente cli : cliDAO.readTable()) {
+            modelo.addRow(new Object[]{
+                cli.getId(),
+                cli.getNome(),
+                cli.getFone(),
+                cli.getCpf(),
+                cli.getSexo(),
+                cli.getEndereco(),
+                cli.getEmail(),
+                cli.getDataNasc()
+            });
+
+        }
+    }
+
+    public void readTableForDesc(String desc) {
+        DefaultTableModel modelo = (DefaultTableModel) JTCliente.getModel();
+        modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
+        //metodos para preencher as tabelas
+        ClienteDAO cliDAO = new ClienteDAO();
+        // metodo para trazer os produtos e adicionar as linhas
+        for (Cliente cli : cliDAO.readTableForDesc(desc)) {
+            modelo.addRow(new Object[]{
+                cli.getId(),
+                cli.getNome(),
+                cli.getFone(),
+                cli.getCpf(),
+                cli.getSexo(),
+                cli.getEndereco(),
+                cli.getEmail(),
+                cli.getDataNasc()
+            });
+        }
+    }
+    // Desabilita os campos do formulário
+    private void desabilitaCampos() {
+        txtNome.setEnabled(false);
+        txtCPF.setEnabled(false);
+        txtEndereco.setEnabled(false);
+        txtFone.setEnabled(false);
+        cbSexo.setEnabled(false);
+    }
+
+    // Habilita os campos do formulário
+    private void habilitaCampos() {
+
+        txtNome.setEnabled(true);
+        txtCPF.setEnabled(true);
+        txtEndereco.setEnabled(true);
+        txtFone.setEnabled(true);
+        cbSexo.setEnabled(true);
+    }
 }
