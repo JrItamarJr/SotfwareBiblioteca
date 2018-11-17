@@ -1,6 +1,6 @@
 # SotfwareBiblioteca
 Projeto feito pela equipe de Desenvolvimento da Faculdade FASG - Praticas em Desenvolvimento de Software - 2018
-![CSCore Logo](http://fs1.directupload.net/images/150528/h8n8qwyc.png)
+![Gestao Biblioteca Logo](https://uploaddeimagens.com.br/images/001/731/326/full/fundo.png?1542418881)
 
 
 # CSCore - .NET Audio Library #
