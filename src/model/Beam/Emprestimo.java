@@ -16,6 +16,24 @@ public class Emprestimo {
     private int id_livro;
     private String data_emprestimo;
     private String data_devolucao;
+    private String nomeLivro;
+    private String nomeCliente;
+
+    public String getNomeLivro() {
+        return nomeLivro;
+    }
+
+    public void setNomeLivro(String nomeLivro) {
+        this.nomeLivro = nomeLivro;
+    }
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
 
     public Emprestimo() {
     }   

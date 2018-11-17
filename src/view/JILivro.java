@@ -9,8 +9,10 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
+import javax.swing.table.TableRowSorter;
 import model.Beam.Livro;
 import utils.BdLivro;
+import model.DAO.LivrosDAO;
 
 /**
  *
@@ -19,11 +21,15 @@ import utils.BdLivro;
 public class JILivro extends javax.swing.JInternalFrame {
 
     private JFPrincipal telaPrincipal;
+
     /**
      * Creates new form JILivro
      */
     public JILivro() {
         initComponents();
+        DefaultTableModel modelo = (DefaultTableModel) jTablePesquisa.getModel();
+        jTablePesquisa.setRowSorter(new TableRowSorter(modelo));
+        readTable();
         desabilitaCampos();
     }
 
@@ -37,7 +43,7 @@ public class JILivro extends javax.swing.JInternalFrame {
     private void initComponents() {
 
         jPanel2 = new javax.swing.JPanel();
-        jTPesquisar = new javax.swing.JTextField();
+        txtnome = new javax.swing.JTextField();
         jBPesquisar = new javax.swing.JButton();
         jScrollPane1 = new javax.swing.JScrollPane();
         jTablePesquisa = new javax.swing.JTable();
@@ -49,12 +55,12 @@ public class JILivro extends javax.swing.JInternalFrame {
         jLabel4 = new javax.swing.JLabel();
         jLabel5 = new javax.swing.JLabel();
         jLabel7 = new javax.swing.JLabel();
-        jT1Exemplar = new javax.swing.JTextField();
-        jT2Autor = new javax.swing.JTextField();
-        jT3Edicao = new javax.swing.JTextField();
-        jT4Ano = new javax.swing.JTextField();
-        jT5Status = new javax.swing.JTextField();
-        jT0Id = new javax.swing.JTextField();
+        txtexemplar = new javax.swing.JTextField();
+        txtautor = new javax.swing.JTextField();
+        txtedicao = new javax.swing.JTextField();
+        txtano = new javax.swing.JTextField();
+        txtdisponiblidade = new javax.swing.JTextField();
+        txtid = new javax.swing.JTextField();
         jPanel3 = new javax.swing.JPanel();
         jBExcluir = new javax.swing.JButton();
         jBAlterar = new javax.swing.JButton();
@@ -69,7 +75,12 @@ public class JILivro extends javax.swing.JInternalFrame {
 
         jPanel2.setBorder(javax.swing.BorderFactory.createTitledBorder(null, "Pesquisar Livros", javax.swing.border.TitledBorder.DEFAULT_JUSTIFICATION, javax.swing.border.TitledBorder.DEFAULT_POSITION, new java.awt.Font("Century Gothic", 0, 12))); // NOI18N
 
-        jTPesquisar.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtnome.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtnome.addKeyListener(new java.awt.event.KeyAdapter() {
+            public void keyReleased(java.awt.event.KeyEvent evt) {
+                txtnomeKeyReleased(evt);
+            }
+        });
 
         jBPesquisar.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jBPesquisar.setText("Pesquisar");
@@ -80,13 +91,42 @@ public class JILivro extends javax.swing.JInternalFrame {
         });
 
         jTablePesquisa.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
-        jTablePesquisa.setModel(tmLivro);
+        jTablePesquisa.setModel(new javax.swing.table.DefaultTableModel(
+            new Object [][] {
+
+            },
+            new String [] {
+                "ID", "Exemplar", "Autor", "Edição", "Ano", "Disponibilidade"
+            }
+        ) {
+            boolean[] canEdit = new boolean [] {
+                false, false, false, false, false, false
+            };
+
+            public boolean isCellEditable(int rowIndex, int columnIndex) {
+                return canEdit [columnIndex];
+            }
+        });
         jTablePesquisa.addMouseListener(new java.awt.event.MouseAdapter() {
-            public void mouseClicked(java.awt.event.MouseEvent evt) {
-                jTablePesquisaMouseClicked(evt);
+            public void mouseReleased(java.awt.event.MouseEvent evt) {
+                jTablePesquisaMouseReleased(evt);
             }
         });
         jScrollPane1.setViewportView(jTablePesquisa);
+        if (jTablePesquisa.getColumnModel().getColumnCount() > 0) {
+            jTablePesquisa.getColumnModel().getColumn(0).setResizable(false);
+            jTablePesquisa.getColumnModel().getColumn(0).setPreferredWidth(40);
+            jTablePesquisa.getColumnModel().getColumn(1).setResizable(false);
+            jTablePesquisa.getColumnModel().getColumn(1).setPreferredWidth(150);
+            jTablePesquisa.getColumnModel().getColumn(2).setResizable(false);
+            jTablePesquisa.getColumnModel().getColumn(2).setPreferredWidth(150);
+            jTablePesquisa.getColumnModel().getColumn(3).setResizable(false);
+            jTablePesquisa.getColumnModel().getColumn(3).setPreferredWidth(150);
+            jTablePesquisa.getColumnModel().getColumn(4).setResizable(false);
+            jTablePesquisa.getColumnModel().getColumn(4).setPreferredWidth(40);
+            jTablePesquisa.getColumnModel().getColumn(5).setResizable(false);
+            jTablePesquisa.getColumnModel().getColumn(5).setPreferredWidth(70);
+        }
 
         jLabel8.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel8.setText("Nome:");
@@ -101,7 +141,7 @@ public class JILivro extends javax.swing.JInternalFrame {
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel8)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jTPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtnome, javax.swing.GroupLayout.PREFERRED_SIZE, 415, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jBPesquisar, javax.swing.GroupLayout.DEFAULT_SIZE, 128, Short.MAX_VALUE))
                     .addComponent(jScrollPane1, javax.swing.GroupLayout.Alignment.TRAILING))
@@ -112,7 +152,7 @@ public class JILivro extends javax.swing.JInternalFrame {
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jBPesquisar)
-                    .addComponent(jTPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtnome, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel8))
                 .addGap(8, 8, 8)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
@@ -139,17 +179,17 @@ public class JILivro extends javax.swing.JInternalFrame {
         jLabel7.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel7.setText("ID: ");
 
-        jT1Exemplar.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtexemplar.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        jT2Autor.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtautor.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        jT3Edicao.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtedicao.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        jT4Ano.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtano.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        jT5Status.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtdisponiblidade.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        jT0Id.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtid.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
         javax.swing.GroupLayout jPanel1Layout = new javax.swing.GroupLayout(jPanel1);
         jPanel1.setLayout(jPanel1Layout);
@@ -164,23 +204,23 @@ public class JILivro extends javax.swing.JInternalFrame {
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jT4Ano, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtano, javax.swing.GroupLayout.PREFERRED_SIZE, 136, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel5)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jT5Status))
+                        .addComponent(txtdisponiblidade))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jT0Id)
+                        .addComponent(txtid)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel1)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                        .addComponent(jT1Exemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE))
+                        .addComponent(txtexemplar, javax.swing.GroupLayout.PREFERRED_SIZE, 536, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel1Layout.createSequentialGroup()
-                        .addComponent(jT2Autor, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addComponent(txtautor, javax.swing.GroupLayout.PREFERRED_SIZE, 350, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                         .addComponent(jLabel3)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jT3Edicao)))
+                        .addComponent(txtedicao)))
                 .addContainerGap())
         );
         jPanel1Layout.setVerticalGroup(
@@ -189,20 +229,20 @@ public class JILivro extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel7)
-                    .addComponent(jT0Id, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtid, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel1)
-                    .addComponent(jT1Exemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtexemplar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jT2Autor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtautor, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
                     .addComponent(jLabel3)
-                    .addComponent(jT3Edicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                    .addComponent(txtedicao, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                    .addComponent(jT4Ano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtano, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
-                    .addComponent(jT5Status, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtdisponiblidade, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
@@ -331,251 +371,78 @@ public class JILivro extends javax.swing.JInternalFrame {
 //        }
     }//GEN-LAST:event_jBPesquisarActionPerformed
 
-    private void jTablePesquisaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePesquisaMouseClicked
-        // Salva a posição da linha selecionada na tabela de pesquisa
-        int linhaSelecionada = jTablePesquisa.getSelectedRow();
-
-        jT0Id.setText(jTablePesquisa.getValueAt(linhaSelecionada, 0).toString());
-        jT1Exemplar.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 1));
-        jT2Autor.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 2));
-        jT3Edicao.setText(jTablePesquisa.getValueAt(linhaSelecionada, 3).toString());
-        jT4Ano.setText(jTablePesquisa.getValueAt(linhaSelecionada, 4).toString());
-        jT5Status.setText((String) jTablePesquisa.getValueAt(linhaSelecionada, 5));
-
-        // Ao selecionar um registro, os campos são ativados possibilitando fazer alterações
-        //habilitaCampos();
-    }//GEN-LAST:event_jTablePesquisaMouseClicked
-
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
-        try {
-            excluirRegistro();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao excluir registro.");
+        if(jTablePesquisa.getSelectedRow() != -1){
+            Livro liv = new Livro();
+            LivrosDAO livDAO = new LivrosDAO();
+            liv.setId((int) jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(),0));
+            livDAO.delete(liv);
+            readTable();
         }
+        
+        
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
-        try {
-            alteraRegistro();
-        } catch (SQLException ex) {
-            JOptionPane.showMessageDialog(rootPane, "Erro ao alterar registro.");
+        if (jTablePesquisa.getSelectedRow() != -1) {
+            Livro liv = new Livro();
+            LivrosDAO livDAO = new LivrosDAO();
+            liv.setAutor(txtautor.getText());
+            liv.setAno(Integer.parseInt(txtano.getText()));
+            liv.setDisponibilidade(txtdisponiblidade.getText());
+            liv.setEdicao(Integer.parseInt(txtedicao.getText()));
+            liv.setExemplar(txtexemplar.getText());
+            liv.setId(Integer.parseInt(txtid.getText()));
+            livDAO.update(liv);
+            readTable();
         }
     }//GEN-LAST:event_jBAlterarActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
-        habilitaCampos();
-        // Limpa os dados dos campos
-        limpaCampos();
+
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
-        cadastraRegistro();
+        Livro liv = new Livro();
+        LivrosDAO livDAO = new LivrosDAO();
+        liv.setAutor(txtautor.getText());
+        liv.setAno(Integer.parseInt(txtano.getText()));
+        liv.setDisponibilidade(txtdisponiblidade.getText());
+        liv.setEdicao(Integer.parseInt(txtedicao.getText()));
+        liv.setExemplar(txtexemplar.getText());
+        livDAO.create(liv);
+        readTable();
+        txtano.setText("");
+        txtautor.setText("");
+        txtdisponiblidade.setText("");
+        txtedicao.setText("");
+        txtexemplar.setText("");
+        txtid.setText("");
     }//GEN-LAST:event_jBCadastrarActionPerformed
 
     private void jBSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSairActionPerformed
         this.dispose();
     }//GEN-LAST:event_jBSairActionPerformed
 
-    private void cadastraRegistro() {
-        // Antes de cadastrar, verifica se o usuário está com algum registro selecionado
-        if (jT1Exemplar.isEditable() && jT0Id.getText().equals("")) {
-            // Antes de cadastrar, verifica se os campos foram preenchidos
-            if (verificaDados()) {
-                try {
-                    Livro l = new Livro();
-
-                    l.setExemplar(jT1Exemplar.getText());
-                    l.setAutor(jT2Autor.getText());
-                    l.setEdicao(Byte.valueOf(jT3Edicao.getText()));
-                    l.setAno(Short.valueOf(jT4Ano.getText()));
-                    l.setDisponibilidade(jT5Status.getText());                  
-
-                    BdLivro d = new BdLivro();
-
-                    d.adicionaLivro(l);
-
-                    JOptionPane.showMessageDialog(rootPane, "Dados cadastrados com sucesso.");
-                    limpaCampos();
-                    desabilitaCampos();
-
-                } catch (SQLException ex) {
-                    JOptionPane.showMessageDialog(rootPane, "Erro ao cadastrar dados.");
-                }
-            }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Para cadastrar um novo registro.\nClique em 'Novo'.");
-        }
-    }
-    
-    // Método p/ validação do formulário
-    private boolean verificaDados() {
-        if ((!jT1Exemplar.getText().equals("")) && (!jT2Autor.getText().equals("")) 
-                && (!jT3Edicao.getText().equals("")) && (!jT4Ano.getText().equals(""))
-                && (!jT5Status.getText().equals(""))) {
-            return true;
-        }
-        JOptionPane.showMessageDialog(rootPane, "Dados imcompletos.");
-        return false;
-    }
-    
-    DefaultTableModel tmLivro = new DefaultTableModel(null, new String[]{"Id", "Exemplar", "Autor", "Edição", "Ano", "Disponibilidade"});
-    List<Livro> livros;
-
-    private void listaContatos() throws SQLException {
-        limpaCampos();
-        BdLivro d = new BdLivro();
-        livros = d.getLista("%" + jTPesquisar.getText() + "%"); 
-        
-        // Após pesquisar os contatos, executa o método p/ exibir o resultado na tabela pesquisa
-        mostraPesquisa(livros);
-        livros.clear();
-    }
-    
-    // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisa(List<Livro> livros) {
-        // Limpa a tabela sempre que for solicitado uma nova pesquisa
-        limparTabela();
-        
-        if (livros.isEmpty()) {
-            JOptionPane.showMessageDialog(rootPane, "Nenhum registro encontrado.");
-        } else {            
-            // Linha em branco usada no for, para cada registro é criada uma nova linha 
-            String[] linha = new String[] {null, null, null, null, null, null, null};
-            // P/ cada registro é criada uma nova linha, cada linha recebe os campos do registro
-            for (int i = 0; i < livros.size(); i++) {
-                tmLivro.addRow(linha);
-                tmLivro.setValueAt(livros.get(i).getId(), i, 0);
-                tmLivro.setValueAt(livros.get(i).getExemplar(), i, 1);
-                tmLivro.setValueAt(livros.get(i).getAutor(), i, 2);
-                tmLivro.setValueAt(livros.get(i).getEdicao(), i, 3);
-                tmLivro.setValueAt(livros.get(i).getAno(), i, 4);
-                tmLivro.setValueAt(livros.get(i).getDisponibilidade(), i, 5);               
-            }            
-        }
-    }
-    
-    // Limpa a tabela de resultados
-    private void limparTabela() {       
-        while (tmLivro.getRowCount() > 0) {            
-            tmLivro.removeRow(0);
-        }
-    }
-    /* Outra opção de limpar tabelas
-    private void limparTabela() {        
-        while (tmLivro.getRowCount() > 0) {                
-            tmLivro.getDataVector().removeAllElements();
-        }
-    }
-    */  
-    /* <-PESQUISA---- */      
-    
-    
-    
-    /* ----EXCLUIR-> */
-    // MÉTODOS:
-    
-    // Exclui resgistro
-    private void excluirRegistro() throws SQLException {
-        // Se algum registro estiver selecionado
+    private void jTablePesquisaMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTablePesquisaMouseReleased
+        // TODO add your handling code here:
         if (jTablePesquisa.getSelectedRow() != -1) {
-            // Exibe uma janela de confirmação antes de exluir o registro
-            int resp = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente excluir este registro?",
-                    "Confirmação!", JOptionPane.YES_NO_OPTION);
 
-            // Se a confirmação for SIM
-            if (resp == JOptionPane.YES_NO_OPTION) {
-                // Recebe a linha selecionada
-                int linhaSelecionada = jTablePesquisa.getSelectedRow();
-                // Recebe o ID da linha selecionada
-                int id = (int) jTablePesquisa.getValueAt(linhaSelecionada, 0);
-                // Remove o registro, usando como parâmetro, o id da linha selecionada                
-                BdLivro d = new BdLivro();
-                d.remove(id);
+            txtid.setText(jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(), 0).toString());
+            txtexemplar.setText(jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(), 1).toString());
+            txtedicao.setText(jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(), 2).toString());
+            txtautor.setText(jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(), 3).toString());
+            txtano.setText(jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(), 4).toString());
+            txtdisponiblidade.setText(jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(), 5).toString());
 
-                JOptionPane.showMessageDialog(rootPane, "Registro excluido com sucesso.");
-                limpaCampos();
-                desabilitaCampos();
-            }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Registro não selecionado.");
         }
-    }
-    /* <-EXCLUIR---- */
-    
-    
-    
-    
-    /* ----ALTERAR-> */
-    // MÉTODOS:
-    
-    // Altera registro
-    private void alteraRegistro() throws SQLException {
-        if (jTablePesquisa.getSelectedRow() != -1) {
-            int resp = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente alterar este registro?",
-                    "Confirmação!", JOptionPane.YES_NO_OPTION);
+    }//GEN-LAST:event_jTablePesquisaMouseReleased
 
-            // Se a confirmação for SIM
-            if (resp == JOptionPane.YES_NO_OPTION) {                
-                Livro l = new Livro();
-                BdLivro d = new BdLivro();
-                
-                l.setId(Integer.valueOf(jT0Id.getText()));
-                l.setExemplar(jT1Exemplar.getText());
-                l.setAutor(jT2Autor.getText());
-                l.setEdicao(Byte.valueOf(jT3Edicao.getText()));
-                l.setAno(Short.valueOf(jT4Ano.getText())); 
-                l.setDisponibilidade(jT5Status.getText());          
-                       
-                d.altera(l);
-                
-                JOptionPane.showMessageDialog(rootPane, "Registro alterado com sucesso.");
-                limpaCampos();
-                desabilitaCampos();
-                listaContatos();
-            }
-        } else {
-            JOptionPane.showMessageDialog(rootPane, "Registro não selecionado.");
-        }
-    }
-    /* <-ALTERAR---- */
-    
-    
-    
-    
-    /* ----OUTROS-> */
-    // MÉTODOS:
-    
-    // Limpa os campos do formulário
-    private void limpaCampos() {
-        jT0Id.setText("");
-        jT1Exemplar.setText("");
-        jT2Autor.setText("");
-        jT3Edicao.setText("");
-        jT4Ano.setText("");
-        jT5Status.setText("");
-    }
-    
-    // Desabilita os campos do formulário
-    private void desabilitaCampos() {
-        jT0Id.setEditable(false);
-        jT1Exemplar.setEditable(false);
-        jT2Autor.setEditable(false);
-        jT3Edicao.setEditable(false);
-        jT4Ano.setEditable(false);
-        jT5Status.setEditable(false);
-    }
-    
-    // Habilita os campos do formulário
-    private void habilitaCampos() {
-        
-        jT1Exemplar.setEditable(true);
-        jT2Autor.setEditable(true);
-        jT3Edicao.setEditable(true);
-        jT4Ano.setEditable(true);
-        jT5Status.setEditable(true);
-    }
-    
-    /* <-OUTROS---- */
+    private void txtnomeKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtnomeKeyReleased
+        // TODO add your handling code here:
+        readTableForDesc(txtnome.getText());
+    }//GEN-LAST:event_txtnomeKeyReleased
+
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBAlterar;
     private javax.swing.JButton jBCadastrar;
@@ -595,13 +462,70 @@ public class JILivro extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel6;
     private javax.swing.JScrollPane jScrollPane1;
-    private javax.swing.JTextField jT0Id;
-    private javax.swing.JTextField jT1Exemplar;
-    private javax.swing.JTextField jT2Autor;
-    private javax.swing.JTextField jT3Edicao;
-    private javax.swing.JTextField jT4Ano;
-    private javax.swing.JTextField jT5Status;
-    private javax.swing.JTextField jTPesquisar;
     private javax.swing.JTable jTablePesquisa;
+    private javax.swing.JTextField txtano;
+    private javax.swing.JTextField txtautor;
+    private javax.swing.JTextField txtdisponiblidade;
+    private javax.swing.JTextField txtedicao;
+    private javax.swing.JTextField txtexemplar;
+    private javax.swing.JTextField txtid;
+    private javax.swing.JTextField txtnome;
     // End of variables declaration//GEN-END:variables
+public void readTable() {
+        DefaultTableModel modelo = (DefaultTableModel) jTablePesquisa.getModel();
+        modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
+        //metodos para preencher as tabelas
+        LivrosDAO livDAO = new LivrosDAO();
+        // metodo para trazer os produtos e adicionar as linhas
+        for (Livro liv : livDAO.readTable()) {
+            modelo.addRow(new Object[]{
+                liv.getId(),
+                liv.getExemplar(),
+                liv.getEdicao(),
+                liv.getAutor(),
+                liv.getAno(),
+                liv.getDisponibilidade()
+
+            });
+
+        }
+    }
+
+    public void readTableForDesc(String desc) {
+        DefaultTableModel modelo = (DefaultTableModel) jTablePesquisa.getModel();
+        modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
+        //metodos para preencher as tabelas
+        LivrosDAO livDAO = new LivrosDAO();
+        // metodo para trazer os produtos e adicionar as linhas
+        for (Livro liv : livDAO.readTableForDesc(desc)) {
+            modelo.addRow(new Object[]{
+                liv.getId(),
+                liv.getExemplar(),
+                liv.getEdicao(),
+                liv.getAutor(),
+                liv.getAno(),
+                liv.getDisponibilidade()
+            });
+        }
+    }
+
+    // Desabilita os campos do formulário
+    private void desabilitaCampos() {
+//        txtNome.setEnabled(false);
+//        txtCPF.setEnabled(false);
+//        txtEndereco.setEnabled(false);
+//        txtFone.setEnabled(false);
+//        cbSexo.setEnabled(false);
+    }
+
+    // Habilita os campos do formulário
+    private void habilitaCampos() {
+
+//        txtNome.setEnabled(true);
+//        txtCPF.setEnabled(true);
+//        txtEndereco.setEnabled(true);
+//        txtFone.setEnabled(true);
+//        cbSexo.setEnabled(true);
+    }
+
 }

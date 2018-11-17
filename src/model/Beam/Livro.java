@@ -13,11 +13,46 @@ public class Livro {
     
     private int id;
     private String exemplar;
-    private String autor;
-    private byte edicao;
-    private short ano;
-    private String disponibilidade;
 
+    private String autor;
+    private int edicao;
+    private int ano;
+    private String disponibilidade;
+    private String editora;
+    private String nomeLivro;
+    
+    
+    
+    public int getEdicao() {
+        return edicao;
+    }
+
+    public void setEdicao(int edicao) {
+        this.edicao = edicao;
+    }
+
+    public int getAno() {
+        return ano;
+    }
+
+    public void setAno(int ano) {
+        this.ano = ano;
+    }
+    public String getNomeLivro() {
+        return nomeLivro;
+    }
+
+    public void setNomeLivro(String nomeLivro) {
+        this.nomeLivro = nomeLivro;
+    }
+
+    public String getEditora() {
+        return editora;
+    }
+
+    public void setEditora(String editora) {
+        this.editora = editora;
+    }
     public Livro(int id, String exemplar, String autor, byte edicao, short ano, String disponibilidade) {
         this.id = id;
         this.exemplar = exemplar;
@@ -54,22 +89,7 @@ public class Livro {
         this.autor = autor;
     }
 
-    public byte getEdicao() {
-        return edicao;
-    }
-
-    public void setEdicao(byte edicao) {
-        this.edicao = edicao;
-    }
-
-    public short getAno() {
-        return ano;
-    }
-
-    public void setAno(short ano) {
-        this.ano = ano;
-    }
-
+    
     public String getDisponibilidade() {
         return disponibilidade;
     }
