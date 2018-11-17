@@ -3,50 +3,59 @@ Projeto feito pela equipe de Desenvolvimento da Faculdade FASG - Praticas em Des
 ![Gestao Biblioteca Logo](https://uploaddeimagens.com.br/images/001/731/326/full/fundo.png?1542418881)
 
 
-# CSCore - .NET Audio Library #
+# Java - Dependencias #
 
-[![Github-Release](https://img.shields.io/github/release/filoe/cscore.svg)](https://github.com/filoe/cscore/releases)
-[![NuGet-Release](https://img.shields.io/nuget/v/CSCore.svg)](https://www.nuget.org/packages/CSCore/)
-[![Donate](https://img.shields.io/badge/Donate-PayPal-green.svg)](https://www.paypal.com/cgi-bin/webscr?cmd=_s-xclick&hosted_button_id=N2ZU8PSBFEXPJ)
-[![Chat on gitter https://gitter.im/cscorelib/Lobby](https://badges.gitter.im/cscorelib/Lobby.svg)](https://gitter.im/cscorelib/Lobby?utm_source=badge&utm_medium=badge&utm_campaign=pr-badge&utm_content=badge)
+[![MySQL - Release](https://img.shields.io/badge/MySQL-8.0-blue.svg)](https://www.mysql.com/products/enterprise/database/)
+[![Git Bash - Release](https://img.shields.io/badge/Git%20Bash-2.19.1-red.svg)](https://gitforwindows.org/)
+[![GitHub - Release](https://img.shields.io/badge/Git-Hub-lightgrey.svg)](https://help.github.com/articles/create-a-repo/)
 
-[![NuGet-Release](https://img.shields.io/nuget/vpre/CSCore.Ffmpeg.svg?label=%22nuget%20CScore.Ffmpeg%22)](https://www.nuget.org/packages/CSCore.Ffmpeg/)
 
-CSCore is a free .NET audio library which is completely written in C#. Although it is still a rather young project, it offers tons of features like playing or capturing audio, en- or decoding many different codecs, effects and much more!
+**Projeto criado por Alunos de Analise e Desenvolvimento de Sistemas para fins institucionais.**
 
-CSCore is based on a very extensible architecture which allows you to make it fit to your needs without any major effort. You can build music players, voice chats, audio recorders and so on!
+Para o Desenvolvimento foi usado o Netbeans IDE 8.2 ultilizando o **JDK SE**
 
-For more details, take a look at the source or the [online documentation](http://filoe.github.io/cscore/sharpDox/).
+Criados pelos alunos - **Itamar Filho** e **Alcenir Colodetti** sobre orientação do professor *André Bergamin* na matéria de Praticas em Desenvolvimento de Software.
 
-Feel free to download or clone the source code:
+Para mais detalhes sobre o curso, disponibilizo aqui site oficial da Faculdade [FASG](http://www.iesges.edu.br/index.php?page=cursos.ads).
 
-    https://github.com/filoe/cscore.git
 
-You may prefer to install the [CSCore nuget package](https://www.nuget.org/packages/CSCore/):
+Para baixar como ZIP ou Clonar o repositório segue o Link abaixo:
 
-    Install-Package CSCore
+    https://github.com/JrItamarJr/SotfwareBiblioteca.git
+
+Para inciar o precimento de Clone segue uns comandos que podem ser encontrados neste Link: [Iniciando um Repositório GIT](https://git-scm.com/book/en/v2/Git-Basics-Getting-a-Git-Repository)
+
+    $ git init
+    $ git clone https://github.com/JrItamarJr/SotfwareBiblioteca.git
+    $ git add *.
+    $ git commit -m "Commit Inicial"
     
-For **FFmpeg** support, install the [CSCore.Ffmpeg nuget package](https://www.nuget.org/packages/CSCore.Ffmpeg/)
 
-    Install-Package CSCore.Ffmpeg -Pre
-    
-### Why CSCore? ###
- - **Highly optimized PERFORMANCE** through usage of CLI instructions
- - **Designed for newbies and professionals** 
- - **Tons of features**
- - **Fast support on [github](https://github.com/filoe/cscore), [codeplex](http://cscore.codeplex.com/) or [stackoverflow](http://stackoverflow.com/questions/tagged/cscore)** 
- - **High code coverage through unit tests** 
- - **Licensed under the MS-PL** (does not include the [CSCore.Ffmpeg](https://github.com/filoe/cscore/tree/master/CSCore.Ffmpeg) project which is licensed under the LGPL)
+### Qual o objetivo? ###
+ - **Entender como funciona um Sala de Desenvolvimento;** 
+ - **Criar modelagem de dados que fique mais seguro e de facil manutenção;** 
+ - **Ultilizar a metodologia de Desenvolvimento Agil;**
+ - **Entender o funcionamento do Controle de Fonte em um Software  [github](https://github.com/filoe/cscore).** 
+ 
+### Entenda ###
 
-### Supported Features ###
+o Software foi remodelado tendo grandes modificações em seu fonte. O resultado disso você verá abaixo:
 
-Currently the following features are implemented:
-
-- **Realtime audio processing**
-  - Process audio data in realtime
-  - Apply any processors in any order you want in realtime
-  - Create custom processors (e.g. effects, analyzes, decoders,...)
-- **Codecs** *1
+- **Tela de Login**
+  - Validação de Usuario no Banco de Dados;
+  - Usuario de Contingência (Para login sem Internet);
+  - Layout de Login Customizado.
+  
+  ![Tela de Login](https://uploaddeimagens.com.br/images/001/731/368/thumb/Tela_Login.PNG?1542421037)
+  
+  - **Tela de Principal**
+  - Validação de Usuario no Banco de Dados;
+  - Usuario de Contingência (Para login sem Internet);
+  - Layout de Login Customizado.
+  
+  ![Tela Principal](https://image.ibb.co/inPi4f/Tela-Principal.png)
+  
+- **Codecs**
   - MP3
   - WAVE (PCM, IeeeFloat, GSM, ADPCM,...)
   - FLAC
