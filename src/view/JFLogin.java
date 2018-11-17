@@ -5,6 +5,9 @@
  */
 package view;
 
+import java.awt.Toolkit;
+import javax.swing.JOptionPane;
+
 /**
  *
  * @author Aluno
@@ -16,6 +19,7 @@ public class JFLogin extends javax.swing.JFrame {
      */
     public JFLogin() {
         initComponents();
+        setIcon();
     }
 
     /**
@@ -40,6 +44,7 @@ public class JFLogin extends javax.swing.JFrame {
         jTextField1.setText("jTextField1");
 
         setDefaultCloseOperation(javax.swing.WindowConstants.EXIT_ON_CLOSE);
+        setTitle("Gestão Biblioteca");
         setUndecorated(true);
         setResizable(false);
 
@@ -87,8 +92,10 @@ public class JFLogin extends javax.swing.JFrame {
         jLabel2.setText("Senha:");
 
         txtNome.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtNome.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         txtSenha.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtSenha.setHorizontalAlignment(javax.swing.JTextField.CENTER);
 
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
@@ -137,18 +144,21 @@ public class JFLogin extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnSairActionPerformed
-
+//Fecha o Sistema
         this.dispose();
         // TODO add your handling code here:
     }//GEN-LAST:event_btnSairActionPerformed
 
     private void btnEntrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnEntrarActionPerformed
-        
+        //Caso login esteja certo abre o Form Pricipal
         if(txtNome.getText().equalsIgnoreCase("adm") ||txtSenha.getText().equals("123")){
             JFPrincipal jfPrincipal = new JFPrincipal();
             jfPrincipal.setVisible(true);
             this.dispose();
-        
+        }else{
+            JOptionPane.showMessageDialog(null, "Usuario ou senha Incorreto!","Atenção",2);
+            txtNome.setText("");
+            txtSenha.setText("");
         }
     }//GEN-LAST:event_btnEntrarActionPerformed
 
@@ -198,4 +208,8 @@ public class JFLogin extends javax.swing.JFrame {
     private javax.swing.JTextField txtNome;
     private javax.swing.JPasswordField txtSenha;
     // End of variables declaration//GEN-END:variables
+
+    private void setIcon() {
+        setIconImage(Toolkit.getDefaultToolkit().getImage(getClass().getResource("/utils/imagens/fundo.png")));
+    }
 }

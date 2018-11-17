@@ -6,7 +6,22 @@
 package view;
 
 import java.sql.SQLException;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.time.LocalDate;
+import java.time.temporal.ChronoUnit;
+import java.util.Date;
+import java.util.List;
+import java.util.logging.Level;
+import java.util.logging.Logger;
 import javax.swing.JOptionPane;
+import javax.swing.table.DefaultTableModel;
+import model.Beam.Cliente;
+import model.Beam.Emprestimo;
+import model.Beam.Livro;
+import utils.BdCliente;
+import utils.BdEmprestimo;
+import utils.BdLivro;
 
 /**
  *
@@ -14,13 +29,24 @@ import javax.swing.JOptionPane;
  */
 public class JIEmprestimo extends javax.swing.JInternalFrame {
 
+    JFMulta enviaValor;
+    private JFPrincipal telaPrincipal;
+    boolean verifica = false;
     /**
      * Creates new form JIEmprestimo
      */
     public JIEmprestimo() {
         initComponents();
+         verifica = true;
+        // Desabilita os campos ao iniciar a janela
+        desabilitaCamposEmprestimo();   
+        
+        // Mostra a data atual como data do empréstimo        
+        dataEmprestimo();
+        // Mostra a data atual como data do empréstimo        
+        mostraDataDevolucao();
     }
-
+    
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -40,8 +66,8 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
         jLabel2 = new javax.swing.JLabel();
         jLabel3 = new javax.swing.JLabel();
         jLabel4 = new javax.swing.JLabel();
-        jT1IdCliente = new javax.swing.JTextField();
-        jT2IdLivro = new javax.swing.JTextField();
+        txtLivroID = new javax.swing.JTextField();
+        txtClienteID = new javax.swing.JTextField();
         jLabel5 = new javax.swing.JLabel();
         txtDataSaida = new javax.swing.JFormattedTextField();
         txtDataEntrada = new javax.swing.JFormattedTextField();
@@ -66,6 +92,7 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
         jBNovo1 = new javax.swing.JButton();
         jBCadastrar1 = new javax.swing.JButton();
         jBSair1 = new javax.swing.JButton();
+        jPanel6 = new javax.swing.JPanel();
 
         jPanel3.setBorder(javax.swing.BorderFactory.createEtchedBorder());
 
@@ -154,9 +181,9 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
         jLabel4.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel4.setText("Data Saida");
 
-        jT1IdCliente.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtLivroID.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
-        jT2IdLivro.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
+        txtClienteID.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
 
         jLabel5.setFont(new java.awt.Font("Century Gothic", 0, 12)); // NOI18N
         jLabel5.setText("Data Entrada");
@@ -181,15 +208,15 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jLabel3)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jT1IdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtLivroID, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel2)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(jT2IdLivro, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtClienteID, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel4)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                .addComponent(txtDataSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 128, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(txtDataSaida, javax.swing.GroupLayout.PREFERRED_SIZE, 105, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jLabel5)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
@@ -202,9 +229,9 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel1Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
                     .addComponent(jLabel3)
-                    .addComponent(jT1IdCliente, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtLivroID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel2)
-                    .addComponent(jT2IdLivro, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                    .addComponent(txtClienteID, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel4)
                     .addComponent(txtDataSaida, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jLabel5)
@@ -274,31 +301,30 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jScrollPane1)
-                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel8)
-                                    .addGap(0, 14, Short.MAX_VALUE)))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel9)
-                                    .addGap(302, 302, 302))
-                                .addComponent(jScrollPane2)))
-                        .addGroup(jPanel2Layout.createSequentialGroup()
-                            .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                                .addGroup(jPanel2Layout.createSequentialGroup()
-                                    .addComponent(jLabel6)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jRClientes)
-                                    .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                                    .addComponent(jRLivros)
-                                    .addGap(0, 0, Short.MAX_VALUE))
-                                .addComponent(jTPesquisar))
-                            .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                            .addComponent(jBPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addComponent(jScrollPane3, javax.swing.GroupLayout.PREFERRED_SIZE, 0, Short.MAX_VALUE)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel8)
+                                .addGap(0, 14, Short.MAX_VALUE)))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel9)
+                                .addGap(302, 302, 302))
+                            .addComponent(jScrollPane2)))
+                    .addGroup(javax.swing.GroupLayout.Alignment.TRAILING, jPanel2Layout.createSequentialGroup()
+                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
+                            .addGroup(jPanel2Layout.createSequentialGroup()
+                                .addComponent(jLabel6)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRClientes)
+                                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
+                                .addComponent(jRLivros)
+                                .addGap(0, 0, Short.MAX_VALUE))
+                            .addComponent(jTPesquisar))
+                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                        .addComponent(jBPesquisar, javax.swing.GroupLayout.PREFERRED_SIZE, 106, javax.swing.GroupLayout.PREFERRED_SIZE))
                     .addGroup(jPanel2Layout.createSequentialGroup()
                         .addComponent(jLabel11)
                         .addGap(0, 0, Short.MAX_VALUE)))
@@ -334,6 +360,7 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
                 .addGap(16, 16, 16))
         );
 
+        jBExcluir1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jBExcluir1.setText("Excluir");
         jBExcluir1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -341,6 +368,7 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
             }
         });
 
+        jBDevolver1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jBDevolver1.setText("Devolver");
         jBDevolver1.addMouseListener(new java.awt.event.MouseAdapter() {
             public void mouseClicked(java.awt.event.MouseEvent evt) {
@@ -348,6 +376,7 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
             }
         });
 
+        jBNovo1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jBNovo1.setText("Novo");
         jBNovo1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -355,6 +384,7 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
             }
         });
 
+        jBCadastrar1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jBCadastrar1.setText("Emprestar");
         jBCadastrar1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -362,6 +392,7 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
             }
         });
 
+        jBSair1.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
         jBSair1.setText("Sair");
         jBSair1.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
@@ -376,11 +407,11 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
             .addGroup(jPanel5Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel5Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING, false)
-                    .addComponent(jBCadastrar1, javax.swing.GroupLayout.DEFAULT_SIZE, 135, Short.MAX_VALUE)
+                    .addComponent(jBSair1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jBCadastrar1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, 113, Short.MAX_VALUE)
                     .addComponent(jBNovo1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBExcluir1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBDevolver1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jBSair1, javax.swing.GroupLayout.Alignment.LEADING, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jBExcluir1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
         jPanel5Layout.setVerticalGroup(
@@ -399,6 +430,17 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
+        javax.swing.GroupLayout jPanel6Layout = new javax.swing.GroupLayout(jPanel6);
+        jPanel6.setLayout(jPanel6Layout);
+        jPanel6Layout.setHorizontalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 0, Short.MAX_VALUE)
+        );
+        jPanel6Layout.setVerticalGroup(
+            jPanel6Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
+            .addGap(0, 12, Short.MAX_VALUE)
+        );
+
         javax.swing.GroupLayout layout = new javax.swing.GroupLayout(getContentPane());
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
@@ -407,10 +449,12 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
                     .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel6, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addGroup(layout.createSequentialGroup()
                         .addComponent(jPanel2, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                         .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)))
+                        .addComponent(jPanel5, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                        .addGap(0, 0, Short.MAX_VALUE)))
                 .addContainerGap())
         );
         layout.setVerticalGroup(
@@ -422,6 +466,8 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
                     .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
         );
 
@@ -431,23 +477,23 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     private void jBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisarActionPerformed
         // Ao clicar em pesquisar, é executado o método que efetua a pesquisa, e outro método que exibe a lista da pesquisa
 
-//        if (!(jRClientes.isSelected() || jRLivros.isSelected())) {
-//            JOptionPane.showMessageDialog(rootPane, "Selecione um campo de pesquisa.");
-//        } else if (jRClientes.isSelected()) {
-//            // Quando seleciona PESQUISA CLIENTE
-//            try {
-//                listaContatosCliente();
-//            } catch (SQLException ex) {
-//                JOptionPane.showMessageDialog(rootPane, "Erro ao efetuar empréstimo.");
-//            }
-//        } else if (jRLivros.isSelected()) {
-//            // Quando seleciona PESQUISA LIVROS
-//            try {
-//                listaContatosLivro();
-//            } catch (SQLException ex) {
-//                JOptionPane.showMessageDialog(rootPane, "Problemas ao listar contatos.");
-//            }
-//        }
+        if (!(jRClientes.isSelected() || jRLivros.isSelected())) {
+            JOptionPane.showMessageDialog(rootPane, "Selecione um campo de pesquisa.");
+        } else if (jRClientes.isSelected()) {
+            // Quando seleciona PESQUISA CLIENTE
+            try {
+                listaContatosCliente();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(rootPane, "Erro ao efetuar empréstimo.");
+            }
+        } else if (jRLivros.isSelected()) {
+            // Quando seleciona PESQUISA LIVROS
+            try {
+                listaContatosLivro();
+            } catch (SQLException ex) {
+                JOptionPane.showMessageDialog(rootPane, "Problemas ao listar contatos.");
+            }
+        }
 
     }//GEN-LAST:event_jBPesquisarActionPerformed
 
@@ -459,35 +505,35 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
         // Salva a posição da linha selecionada na tabela de pesquisa
         int linhaSelecionada = jTableLivro.getSelectedRow();
 
-        jT2IdLivro.setText(jTableLivro.getValueAt(linhaSelecionada, 0).toString());
+        txtClienteID.setText(jTableLivro.getValueAt(linhaSelecionada, 0).toString());
     }//GEN-LAST:event_jTableLivroMouseClicked
 
     private void jTableClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableClienteMouseClicked
         // Salva a posição da linha selecionada na tabela de pesquisa
         int linhaSelecionada = jTableCliente.getSelectedRow();
 
-        jT1IdCliente.setText(jTableCliente.getValueAt(linhaSelecionada, 0).toString());
+        txtLivroID.setText(jTableCliente.getValueAt(linhaSelecionada, 0).toString());
 
-//        try {
-//            listaContatosEmprestimo();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Erro ao listar emprestimos.");
-//        }
+        try {
+            listaContatosEmprestimo();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao listar emprestimos.");
+        }
     }//GEN-LAST:event_jTableClienteMouseClicked
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
-//        try {
-//            excluirRegistro();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Erro ao excluir registro.");
-//        }
+        try {
+            excluirRegistro();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao excluir registro.");
+        }
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
-//        limpaCamposEmprestimo();
-//        limpaTabelaEmprestimo();
-//        limpaTabelaCliente();
-//        limpaTabelaLivro();
+        limpaCamposEmprestimo();
+        limpaTabelaEmprestimo();
+        limpaTabelaCliente();
+        limpaTabelaLivro();
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSairActionPerformed
@@ -495,54 +541,54 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSairActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
-//        try {
-//            cadastraRegistro();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Erro ao efetuar empréstimo.");
-//        }
+        try {
+            cadastraRegistro();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao efetuar empréstimo.");
+        }
     }//GEN-LAST:event_jBCadastrarActionPerformed
 
     private void jBDevolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBDevolverMouseClicked
-//        try {
-//            devolveLivro();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Erro ao devolver livro.");
-//        } catch (ParseException ex) {
-//            Logger.getLogger(JFEmprestimo.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            devolveLivro();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao devolver livro.");
+        } catch (ParseException ex) {
+            Logger.getLogger(JFEmprestimo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBDevolverMouseClicked
 
     private void jBExcluir1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluir1ActionPerformed
-//        try {
-//            excluirRegistro();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Erro ao excluir registro.");
-//        }
+        try {
+            excluirRegistro();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao excluir registro.");
+        }
     }//GEN-LAST:event_jBExcluir1ActionPerformed
 
     private void jBDevolver1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBDevolver1MouseClicked
-//        try {
-//            devolveLivro();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Erro ao devolver livro.");
-//        } catch (ParseException ex) {
-//            Logger.getLogger(JFEmprestimo.class.getName()).log(Level.SEVERE, null, ex);
-//        }
+        try {
+            devolveLivro();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao devolver livro.");
+        } catch (ParseException ex) {
+            Logger.getLogger(JFEmprestimo.class.getName()).log(Level.SEVERE, null, ex);
+        }
     }//GEN-LAST:event_jBDevolver1MouseClicked
 
     private void jBNovo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovo1ActionPerformed
-//        limpaCamposEmprestimo();
-//        limpaTabelaEmprestimo();
-//        limpaTabelaCliente();
-//        limpaTabelaLivro();
+        limpaCamposEmprestimo();
+        limpaTabelaEmprestimo();
+        limpaTabelaCliente();
+        limpaTabelaLivro();
     }//GEN-LAST:event_jBNovo1ActionPerformed
 
     private void jBCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrar1ActionPerformed
-//        try {
-//            cadastraRegistro();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Erro ao efetuar empréstimo.");
-//        }
+        try {
+            cadastraRegistro();
+        } catch (SQLException ex) {
+            JOptionPane.showMessageDialog(rootPane, "Erro ao efetuar empréstimo.");
+        }
     }//GEN-LAST:event_jBCadastrar1ActionPerformed
 
     private void jBSair1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSair1ActionPerformed
@@ -550,6 +596,455 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSair1ActionPerformed
 
 
+    /* ----CADASTRO-> */
+    // MÉTODOS:
+    
+    // Método p/ cadastrar um registro no banco de dados.
+    private void cadastraRegistro() throws SQLException {
+        // Antes de cadastrar, verifica se o usuário está com algum registro selecionado
+        if (!(jTableEmprestimo.getSelectedRow() != -1)) {
+            // Antes de cadastrar, verifica se os campos foram preenchidos
+            if (verificaDados()) {
+                if (verificaDisponibilidadeLivro()) {
+                    BdEmprestimo d = new BdEmprestimo();
+                    if (!d.verificaMultaCliente(pegaIdCliente())) {
+                        try {
+                            Emprestimo e = new Emprestimo();
+
+                            e.setId_cliente(Integer.valueOf(txtLivroID.getText()));
+                            e.setId_livro(Integer.valueOf(txtClienteID.getText()));
+                            e.setData_emprestimo(salvaDataEmprestimo());
+                            e.setData_devolucao(salvaDataDevolucao());
+
+                            d = new BdEmprestimo();
+
+                            d.adicionaEmprestimo(e);
+
+                            alteraDisponibilidade("0");
+
+                            JOptionPane.showMessageDialog(rootPane, "Empréstimo efetuado com sucesso.");
+                            limpaCamposEmprestimo();
+
+                            listaContatosEmprestimo();
+                            listaContatosLivro();
+
+                        } catch (SQLException ex) {
+                            JOptionPane.showMessageDialog(rootPane, "Erro ao efetuar empréstimo.");
+                        }
+                    } else {
+                        JOptionPane.showMessageDialog(rootPane, "ERRO Empréstimo não autorizado.\nUsuário com pendências correspondentes à multa.\n\n"
+                                + "Só poderá solicitar um novo empréstimo após sanar as pendências.");
+                    }
+                }
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Para cadastrar selecione apenas os campos 'Cliente' e 'Livro.',\n\n"
+                    + "Para fazer um novo empréstimo clique em 'Novo'.");
+        }
+    }
+    
+    // Método p/ validação do formulário
+    private boolean verificaDados() {
+        if ((!txtLivroID.getText().equals("")) && (!txtClienteID.getText().equals("")) 
+                && (!txtDataSaida.getText().equals(""))) {
+            return true;
+        }
+        JOptionPane.showMessageDialog(rootPane, "Dados imcompletos.");
+        return false;
+    }
+    
+    // Pega o campo disponibilidade do livro selecionado
+    public String disponibilidadeLivro() {
+        // Salva a posição da linha selecionada na tabela de pesquisa
+        int linhaSelecionada = jTableLivro.getSelectedRow();        
+        String status = (String) jTableLivro.getValueAt(linhaSelecionada, 3);  
+        
+        return status;
+    }
+    
+    // Método p/ verifica se o livro está disponível
+    private boolean verificaDisponibilidadeLivro() {
+        if (! disponibilidadeLivro().equals("0")) {
+            return true;
+        }
+        JOptionPane.showMessageDialog(rootPane, "Livro selecionado está indisponível.");
+        return false;
+    }
+    /* <-CADASTRO---- */ 
+    
+    
+    
+    
+    /* ----DATAS-> */
+    
+    // Exibe a data do empréstimo(data atual) no formulário
+    private void dataEmprestimo() {
+        Date data = new Date();  
+        
+        SimpleDateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");  
+        String s = formataData.format( data ); 
+        
+        txtDataSaida.setText(formataData.format(data));      
+    }   
+    // Retorna a data de empréstimo
+    private String salvaDataEmprestimo() {
+        Date data = new Date();  
+        
+        SimpleDateFormat formataData = new SimpleDateFormat("yyyy-MM-dd");  
+        String dataEmprestimoFormatada = formataData.format(data); 
+        
+        return dataEmprestimoFormatada;   
+    }  
+    
+    // Exibe a data de devolução no formulário
+    private void mostraDataDevolucao() {        
+        // Recebe a data do sistema
+        Date dataDevolucao = new Date();
+        // Adiciona + 10 à data atual
+        dataDevolucao.setDate(dataDevolucao.getDate() + 7);
+        
+        // Formata a data recebida
+        SimpleDateFormat formataData = new SimpleDateFormat("dd/MM/yyyy");        
+        String dataDevolucaoFormatada = formataData.format(dataDevolucao);
+                
+        txtDataEntrada.setText(dataDevolucaoFormatada);
+    }    
+    // Retorna a data de devolução, pronta p/ ser salva no BD
+    public String salvaDataDevolucao() {
+        // Recebe a data do sistema
+        Date dataDevolucao = new Date();
+        // Adiciona + 10 à data atual
+        dataDevolucao.setDate(dataDevolucao.getDate() + 7);
+        
+        // Formata a data recebida
+        SimpleDateFormat formataData = new SimpleDateFormat("yyyy-MM-dd");        
+        String dataDevolucaoFormatada = formataData.format(dataDevolucao);
+        
+        return dataDevolucaoFormatada;
+    }
+    
+    // Pega a data de devolução no registro selecionado na tebela de emprestimo
+    public String pegaDataDevolucaoTabela() throws ParseException {
+        
+        int linhaSelecionada = jTableEmprestimo.getSelectedRow();   
+        String dataTabela = (jTableEmprestimo.getValueAt(linhaSelecionada, 4)).toString();
+        
+        SimpleDateFormat formataData = new SimpleDateFormat ("yyyy-MM-dd"); 
+        Date dataDevolucao = new Date();
+        
+        dataDevolucao = formataData.parse(dataTabela); 
+        
+        return formataData.format(dataDevolucao);
+    }
+    
+    // Calcula a diferença entre a data prevista para devolução e a data atual
+    private long diferencaData() throws ParseException {
+        LocalDate atual = LocalDate.now();
+        LocalDate dataDevolucao = LocalDate.parse(pegaDataDevolucaoTabela());
+        
+        long diferenca = 0;
+        
+        if (dataDevolucao.compareTo(atual) < 0) {
+            diferenca = ChronoUnit.DAYS.between(dataDevolucao, atual);
+        }
+        
+        return diferenca;       
+    }
+    
+    /* <-DATAS---- */ 
+    
+    
+    
+    
+    /* ----PESQUISA-> */
+    // MÉTODOS:          
+    
+    /* ----CLIENTE-> */ 
+    // Configura campos da tabela de pesquisas de acordo com os campos do Cliente
+    DefaultTableModel tmCliente = new DefaultTableModel(null, new String[]{"Id", "Nome", "CPF"});    
+    // Lista de clientes, recebe os registros retornados da pesquisa
+    List<Cliente> clientes;  
+    
+    // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
+    private void listaContatosCliente() throws SQLException {        
+        BdCliente d = new BdCliente();
+        clientes = d.getLista("%" + jTPesquisar.getText() + "%"); 
+        
+        // Após pesquisar os contatos, executa o método p/ exibir o resultado na tabela pesquisa
+        mostraPesquisaCliente(clientes);
+        clientes.clear();
+    }
+    
+    // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
+    private void mostraPesquisaCliente(List<Cliente> clientes) {
+        // Limpa a tabela sempre que for solicitado uma nova pesquisa
+        limpaTabelaCliente();
+        
+        if (clientes.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Nenhum registro não encontrado.");
+        } else {            
+            // Linha em branco usada no for, para cada registro é criada uma nova linha 
+            String[] linha = new String[] {null, null, null};
+            // P/ cada registro é criada uma nova linha, cada recebe linha os campos do registro
+            for (int i = 0; i < clientes.size(); i++) {
+                tmCliente.addRow(linha);
+                tmCliente.setValueAt(clientes.get(i).getId(), i, 0);
+                tmCliente.setValueAt(clientes.get(i).getNome(), i, 1);
+                tmCliente.setValueAt(clientes.get(i).getCpf(), i, 2);              
+            }            
+        }
+    }   
+    
+    // Limpa a tabela de resultados
+    private void limpaTabelaCliente() {       
+        while (tmCliente.getRowCount() > 0) {            
+            tmCliente.removeRow(0);
+        }
+    } 
+    /*<-CLIENTE----*/
+    
+    
+    /*----EMPRÉSTIMO->*/    
+    // Configura campos da tabela de pesquisas de acordo com os campos dos Empréstimos
+    DefaultTableModel tmEmprestimo = new DefaultTableModel(null, new String[]{"ID", "ID Cliente", "ID Livro", "Data Emprestimo", "Data Devolução"});
+    // Lista de empréstimos, recebe os registros retornados da pesquisa
+    List<Emprestimo> emprestimos;
+    
+    // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
+    private void listaContatosEmprestimo() throws SQLException { 
+        BdEmprestimo d = new BdEmprestimo();
+        emprestimos = d.getListaPorCliente(pegaIdCliente()); 
+        
+        // Após pesquisar os contatos, executa o método p/ exibir o resultado na tabela pesquisa
+        mostraPesquisaEmprestimo(emprestimos);
+        emprestimos.clear();
+    }
+    
+    // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
+    private void mostraPesquisaEmprestimo(List<Emprestimo> emprestimos) {
+        // Limpa a tabela sempre que for solicitado uma nova pesquisa
+        limpaTabelaEmprestimo();
+        
+        if (emprestimos.isEmpty()) {
+        } else {            
+            // Linha em branco usada no for, para cada registro é criada uma nova linha 
+            String[] linha = new String[] {null, null, null, null, null};
+            // P/ cada registro é criada uma nova linha, cada linha recebe os campos do registro
+            for (int i = 0; i < emprestimos.size(); i++) {
+                tmEmprestimo.addRow(linha);
+                tmEmprestimo.setValueAt(emprestimos.get(i).getId_emprestimo(), i, 0);
+                tmEmprestimo.setValueAt(emprestimos.get(i).getId_cliente(), i, 1);
+                tmEmprestimo.setValueAt(emprestimos.get(i).getId_livro(), i, 2);
+                tmEmprestimo.setValueAt(emprestimos.get(i).getData_emprestimo(), i, 3);
+                tmEmprestimo.setValueAt(emprestimos.get(i).getData_devolucao(), i, 4);              
+            }            
+        }
+    } 
+    
+    // Limpa a tabela de resultados
+    private void limpaTabelaEmprestimo() {       
+        while (tmEmprestimo.getRowCount() > 0) {            
+            tmEmprestimo.removeRow(0);
+        }
+    } 
+    /*<-EMPRESTIMO----*/    
+    
+   
+    /* ----LIVRO-> */    
+    // Edita os campos e colunas da tabela de resultados
+    DefaultTableModel tmLivro = new DefaultTableModel(null, new String[]{"Id", "Exemplar", "Autor", "Disponibilidade"});
+    List<Livro> livros;
+    
+    // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
+    private void listaContatosLivro() throws SQLException {
+        BdLivro d = new BdLivro();
+        livros = d.getLista("%" + jTPesquisar.getText() + "%"); 
+        
+        // Após pesquisar os contatos, executa o método p/ exibir o resultado na tabela pesquisa
+        mostraPesquisaLivro(livros);
+        livros.clear();
+    }
+    
+    // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
+    private void mostraPesquisaLivro(List<Livro> livros) {
+        // Limpa a tabela sempre que for solicitado uma nova pesquisa
+        limpaTabelaLivro();
+        
+        if (livros.isEmpty()) {
+            JOptionPane.showMessageDialog(rootPane, "Nenhum registro encontrado.");
+        } else {            
+            // Linha em branco usada no for, para cada registro é criada uma nova linha 
+            String[] linha = new String[] {null, null, null, null};
+            // P/ cada registro é criada uma nova linha, cada linha recebe os campos do registro
+            for (int i = 0; i < livros.size(); i++) {
+                tmLivro.addRow(linha);
+                tmLivro.setValueAt(livros.get(i).getId(), i, 0);
+                tmLivro.setValueAt(livros.get(i).getExemplar(), i, 1);
+                tmLivro.setValueAt(livros.get(i).getAutor(), i, 2);
+                tmLivro.setValueAt(livros.get(i).getDisponibilidade(), i, 3);                
+            }            
+        }
+    }
+    
+    // Limpa a tabela de resultados
+    private void limpaTabelaLivro() {       
+        while (tmLivro.getRowCount() > 0) {            
+            tmLivro.removeRow(0);
+        }
+    }
+    /* <-LIVRO---- */  
+        
+    /* <-PESQUISA---- */      
+    
+    
+    
+    
+    /* ----EXCLUIR-> */
+    // MÉTODOS:
+    
+    // Exclui resgistro
+    private void excluirRegistro() throws SQLException {
+        // Se algum registro estiver selecionado
+        if (jTableEmprestimo.getSelectedRow() != -1) {
+            // Exibe uma janela de confirmação antes de exluir o registro
+            int resp = JOptionPane.showConfirmDialog(rootPane, "Deseja realmente excluir este registro?",
+                    "Confirmação!", JOptionPane.YES_NO_OPTION);
+
+            // Se a confirmação for SIM
+            if (resp == JOptionPane.YES_NO_OPTION) {
+                // Recebe a linha selecionada
+                int linhaSelecionada = jTableEmprestimo.getSelectedRow();
+                // Recebe o ID da linha selecionada
+                int id = (int) jTableEmprestimo.getValueAt(linhaSelecionada, 0);
+                // Remove o registro, usando como parâmetro, o id da linha selecionada                
+                BdEmprestimo d = new BdEmprestimo();
+                d.remove(id);
+
+                JOptionPane.showMessageDialog(rootPane, "Registro excluido com sucesso.");
+                alteraDisponibilidade("1");
+                
+                listaContatosEmprestimo();
+            }
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Registro não selecionado.");
+        }
+    }
+    /* <-EXCLUIR---- */
+    
+    
+    
+    
+    /* ----ALTERAR-> */
+    // MÉTODOS:
+        
+    // Altera a disponibilidade do livro
+    private void alteraDisponibilidade(String status) throws SQLException {
+        if ((jTableCliente.getSelectedRow() != -1) || (jTableLivro.getSelectedRow() != -1)) {  
+                Livro l = new Livro();
+                BdLivro d = new BdLivro();             
+                
+                // Recebe o id do livro, que está sendo exibido no formulário
+                l.setId(Integer.valueOf(pegaIdLivro()));
+                l.setDisponibilidade(status);          
+                       
+                d.alteraDisponibilidadeLivro(l);           
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Livro não selecionado.");
+        }
+    }
+    
+    // Pega o ID do livro referente ao empréstimo selecionado na tabela de pesquisa
+    private String pegaIdLivro() {
+        int linhaSelecionada;
+        String s = "0";
+        if (jTableEmprestimo.getSelectedRow() != -1) {
+            linhaSelecionada = jTableEmprestimo.getSelectedRow();
+            s = jTableEmprestimo.getValueAt(linhaSelecionada, 2).toString();
+        } else if (jTableLivro.getSelectedRow() != -1) {
+            linhaSelecionada = jTableLivro.getSelectedRow();
+            s = jTableLivro.getValueAt(linhaSelecionada, 0).toString();
+        }
+
+        return s;
+    }
+    /* <-ALTERAR---- */
+    
+    
+    
+    
+    /* ----DEVOLVER-> */
+    private void devolveLivro() throws SQLException, ParseException {
+        if (jTableEmprestimo.getSelectedRow() != -1) {
+            // Altera a disponibilidade do livro
+            alteraDisponibilidade("1");          
+            
+            // Exclui o registo de empréstimo
+            // Recebe a linha selecionada
+            int linhaSelecionada = jTableEmprestimo.getSelectedRow();
+            // Recebe o ID da linha selecionada
+            int id = (int) jTableEmprestimo.getValueAt(linhaSelecionada, 0);
+            // Remove o registro, usando como parâmetro, o id da linha selecionada                
+            BdEmprestimo d = new BdEmprestimo();
+            d.remove(id);         
+            
+            if (diferencaData() > 0) {
+                passaValor(String.valueOf(diferencaData()));
+                JOptionPane.showMessageDialog(rootPane, "Emprestimo devolvido após o prazo de vencimento\n"
+                        + "gerando uma multa para o cliente."
+                        + "\n\nPassou " + diferencaData() + " dias do prazo. Esta multa deve ser registrada...");
+                        
+                listaContatosEmprestimo();
+                listaContatosLivro();    
+            } else {
+                JOptionPane.showMessageDialog(rootPane, "Emprestimo devolvido com sucesso.");
+                listaContatosEmprestimo();
+                listaContatosLivro();                
+            }           
+            
+        } else {
+            JOptionPane.showMessageDialog(rootPane, "Emprestimo não selecionado.");
+        }
+    }
+    /* <-DEVOLVER---- */
+    
+    
+    
+    
+    /* ----OUTROS-> */
+    // MÉTODOS:
+    
+    // Limpa os campos do formulário
+    private void limpaCamposEmprestimo() {
+        txtLivroID.setText("");
+        txtClienteID.setText("");
+    }
+    
+    // Desabilita os campos do formulário
+    private void desabilitaCamposEmprestimo() {
+        txtLivroID.setEditable(false);
+        txtClienteID.setEditable(false);
+        txtDataEntrada.setEditable(false);
+        txtDataSaida.setEditable(false);
+    }    
+    
+    // Passando dados para a janela de multas
+    private void passaValor(String valor) throws ParseException, SQLException {
+        enviaValor = new JFMulta();
+        enviaValor.setVisible(true);
+        enviaValor.recebe(String.valueOf(diferencaData()), pegaIdCliente());
+    }
+    
+    // Passa os dados do cliente referente a multa
+    private String pegaIdCliente() throws SQLException {
+        int linhaSelecionada = jTableCliente.getSelectedRow();
+                        
+        String s = jTableCliente.getValueAt(linhaSelecionada, 0).toString();  
+        
+        return s;
+    }
+    
+    /* <-OUTROS---- */
+    
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JButton jBCadastrar;
     private javax.swing.JButton jBCadastrar1;
@@ -574,18 +1069,19 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     private javax.swing.JPanel jPanel2;
     private javax.swing.JPanel jPanel3;
     private javax.swing.JPanel jPanel5;
+    private javax.swing.JPanel jPanel6;
     private javax.swing.JRadioButton jRClientes;
     private javax.swing.JRadioButton jRLivros;
     private javax.swing.JScrollPane jScrollPane1;
     private javax.swing.JScrollPane jScrollPane2;
     private javax.swing.JScrollPane jScrollPane3;
-    private javax.swing.JTextField jT1IdCliente;
-    private javax.swing.JTextField jT2IdLivro;
     private javax.swing.JTextField jTPesquisar;
     private javax.swing.JTable jTableCliente;
     private javax.swing.JTable jTableEmprestimo;
     private javax.swing.JTable jTableLivro;
+    private javax.swing.JTextField txtClienteID;
     private javax.swing.JFormattedTextField txtDataEntrada;
     private javax.swing.JFormattedTextField txtDataSaida;
+    private javax.swing.JTextField txtLivroID;
     // End of variables declaration//GEN-END:variables
 }
