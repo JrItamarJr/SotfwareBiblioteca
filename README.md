@@ -44,91 +44,74 @@ o Software foi remodelado tendo grandes modificações em seu fonte. O resultado
 - **Tela de Login**
   - Validação de Usuario no Banco de Dados;
   - Usuario de Contingência (Para login sem Internet);
-  - Layout de Login Customizado.
+  - Layout de Login Customizado;
+  - **JFrame**.
   
-  ![Tela de Login](https://uploaddeimagens.com.br/images/001/731/368/thumb/Tela_Login.PNG?1542421037)
+  ![Tela de Login](https://image.ibb.co/eA8BQL/Tela-Login.png)
   
-  - **Tela de Principal**
-  - Validação de Usuario no Banco de Dados;
-  - Usuario de Contingência (Para login sem Internet);
-  - Layout de Login Customizado.
+- **Tela de Principal**
+  - Validações de permissões por usuario;
+  - Ações para exibir as Jenelas;
+  - Ação para imperdir que a mesma tela seja aberta duas vezes;
+  - **JFrame**.
   
   ![Tela Principal](https://image.ibb.co/inPi4f/Tela-Principal.png)
   
-- **Codecs**
-  - MP3
-  - WAVE (PCM, IeeeFloat, GSM, ADPCM,...)
-  - FLAC
-  - AAC
-  - AC3
-  - WMA
-  - Raw data
-  - OGG-Vorbis (through NVorbis)
-  - FFmpeg (lots of additional formats, see [CSCore.Ffmpeg](https://github.com/filoe/cscore/tree/master/CSCore.Ffmpeg))
-- **FFmpeg support**
-  - Supported through [CSCore.Ffmpeg](https://github.com/filoe/cscore/tree/master/CSCore.Ffmpeg))
-- **Speaker Output**
-  - WaveOut
-  - DirectSoundOut (realtime streaming)
-  - WASAPI (loop- and event-callback + exclusive mode available)
-  - XAudio2
-- **Recording**
-  - WaveIn
-  - WASAPI (loop- and event-callback + exclusive mode available)
-  - WASAPI loopback capture (capture output from soundcard)
-- **DSP Algorithms**
-  - Fastfouriertransform (FFT)
-  - Effects (Echo, Compressor, Reverb, Chorus, Gargle, Flanger,...)
-  - Resampler
-  - Channel-mixing using custom channel-matrices
-  - Generic Equalizer
-  - ...
-- **XAudio2 support**
-  - XAudio2.7 and XAudio2.8 support
-  - 3D Audio support (see X3DAudio sample)
-  - Streaming source voice implementation allowing
-    the client to stream any codec, custom effect,... to XAudio2
-  - Optimized for games
-- **Mediafoundation encoding and decoding**
-- **DirectX Media Objects Wrapper**
-- **CoreAudioAPI Wrapper**
-  - WASAPI
-  - Windows Multimedia Devices
-  - Windows Audio Session
-  - Endpoint Volume,...
-- **Multi-Channel support**
-- **Flexible**
-  - Configure and customize any parts of CSCore
-  - Use low latency values for realtime performance, high latency values for stability
-  - Adjust the audio quality
-  - Configure custom channel matrices
-  - Create custom effects
-  - ...
-  - Or simply: **Make CSCore fit your needs!**
-- **Tags** (ID3v1, ID3v2, FLAC)
-- **Sample Winforms Visualizations**
-- **Optimized performance though the usage of CLI instructions provided by a custom post compiler**
+- **Cadastro de Clientes**
+  - Cadastrar novos Clientes;
+  - Validações de dados Incorretos;
+  - Manutenção de Dados já existente;
+  - Outros;
+  - **JInternalFrame**.
+  
+  ![Cadastro de Clientes](https://image.ibb.co/k8GgQL/Tela-Clientes.png)
+  
+- **Cadastro de Livros**
+  - Cadastrar novos Livros;
+  - Validações de dados Incorretos;
+  - Manutenção de Dados já existente;
+  - Validação de Disponibilidae;
+  - Outros;
+  - **JInternalFrame**.
+  
+  ![Cadastro de Livros](https://image.ibb.co/dTZCX0/Tela-Livros.png)
+  
+- **Cadastro de Emprestimos**
+  - Cadastrar novos Emprestimos;
+  - Dar baixa em Emprestimos;
+  - Validações de dados Incorretos;
+  - Manutenção de Dados já existente;
+  - Validação de Disponibilidae;
+  - Outros;
+  - **JInternalFrame**.
+  
+  ![Cadastro de Emprestimos](https://image.ibb.co/ck6sX0/Tela-Emprestimo.png)
+  
+- **Visualização de Multas**
+  - Multas geradas automaticamente;
+  - Multas podem ser geradas manualmente;
+  - Dar baixa em multas pendentes;
+  - Validações de dados Incorretos;
+  - Manutenção de Dados já existente;
+  - Validação de Disponibilidae;
+  - Outros;
+  - **JInternalFrame**.
+  
+  ![Visualização de Multas](https://image.ibb.co/h5OT5L/Tela-Multas.png)
+ 
 
-**\*1** Some Codecs are only available on certain platforms. For more details, see [Codeplex-Page](http://cscore.codeplex.com/).
 
-Some projects using already using cscore:
-- [Dopamine](http://www.digimezzo.com/software/dopamine/): _An music player which tries to keep listening to music clean and simple._
-- [Hurricane](https://github.com/Alkalinee/Hurricane): _Is a powerful music player written in C# based on [CSCore sound library](https://github.com/filoe/cscore)._
-- [Sharpex2D](https://github.com/ThuCommix/Sharpex2D): A game engine which _allows you to create beautiful 2D games under .NET for Windows and Mono compatible systems_
-- [Turnt-Ninja](https://github.com/opcon/turnt-ninja): A beat-fighting-ninja-like-get-turnt rhythm game inspired by the wonderful Super Hexagon by Terry Cavanagh.
-- [HTLED](https://www.youtube.com/watch?v=tbrKepBgH3M): A audio visualization displayed on a selfmade 32x16 LED matrix.
-- ...
+**\*-** Este projeto foi baseado em um já existente pelo pelo aluno de ADS **Paulo JP** [Projeto Original](https://github.com/paulojp-dev/projeto-biblioteca-java).
 
-#### Samples: ####
+#### Referencias ####
 
-["CSCore - Visualization"](Samples/WinformsVisualization) Sample:
+[Shields IO](https://shields.io/#/).
 
-![VIS_SAMPLE](http://download-codeplex.sec.s-msft.com/Download?ProjectName=cscore&DownloadId=970569)
+[IMGBB](https://imgbb.com/).
 
-["CSCoreWaveform"](Samples/CSCoreWaveform) Sample:
+[Como fazer um bom README para o seu GitHub](http://pichiliani.com.br/como-fazer-um-bom-readme-para-o-seu-github/).
 
-![WAVFRM_SAMPLE](http://fs5.directupload.net/images/160229/adjvd9u9.png)
+[Java Plugados](https://www.youtube.com/channel/UC_8SElusYdENzVw1Fsk0Nbg).
 
-For more samples see [Samples](Samples/)
 
-#### As long as this document is in development, see [Codeplex](http://cscore.codeplex.com/) for more details.  ####
+#### Java Develops ####
