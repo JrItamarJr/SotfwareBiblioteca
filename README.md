@@ -14,7 +14,7 @@ Projeto feito pela equipe de Desenvolvimento da Faculdade FASG - Praticas em Des
 
 Para o Desenvolvimento foi usado o Netbeans IDE 8.2 ultilizando o **JDK SE**
 
-Criados pelos alunos - **Itamar Filho** e **Alcenir Colodetti** sobre orientação do professor *André Bergamin* na matéria de Praticas em Desenvolvimento de Software.
+Criados pelos alunos - **Itamar Filho**, **Daniel Araujo** e **Alcenir Colodetti** sobre orientação do professor *André Bergamin* na matéria de Praticas em Desenvolvimento de Software.
 
 Para mais detalhes sobre o curso, disponibilizo aqui site oficial da Faculdade [FASG](http://www.iesges.edu.br/index.php?page=cursos.ads).
 
