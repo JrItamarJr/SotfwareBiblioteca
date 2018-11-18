@@ -603,9 +603,9 @@ public void readTable() {
         DefaultTableModel modelo = (DefaultTableModel) JTCliente.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        ClienteDao cliDAO = new ClienteDao();
+        ClienteDao cliDao = new ClienteDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (ClienteBean cli : cliDAO.readTableForDesc(desc)) {
+        for (ClienteBean cli : cliDao.readTableForDesc(desc)) {
             modelo.addRow(new Object[]{
                 cli.getId(),
                 cli.getNome(),
