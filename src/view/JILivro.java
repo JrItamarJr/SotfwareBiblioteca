@@ -5,14 +5,10 @@
  */
 package view;
 
-import java.sql.SQLException;
-import java.util.List;
-import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import Model.Bean.LivroBean;
-import utils.BdLivro;
-import model.Dao.LivrosDao;
+import model.DAO.LivrosDao;
 
 /**
  *

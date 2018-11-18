@@ -1,44 +1,35 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
 package Model.Bean;
 
-/**
- *
- * @author paulojp
- */
 public class MultaBean {
-    private int id_multa;
-    private int id_cliente;
+
+    private int idMulta;
+    private int idCliente;
     private String descricao;
-    private float valor;
+    private double valor;
+    private double valorTotal;
 
-    public MultaBean(int id_multa, int id_emprestimo, String descricao, float valor, String pagamento) {
-        this.id_multa = id_multa;
-        this.id_cliente = id_emprestimo;
-        this.descricao = descricao;
-        this.valor = valor;
+    public double getValorTotal() {
+        return valorTotal;
     }
 
-    public MultaBean() {
+    public void setValorTotal(double valorTotal) {
+        this.valorTotal = valorTotal;
     }
 
-    public int getId_multa() {
-        return id_multa;
+    public int getIdMulta() {
+        return idMulta;
     }
 
-    public void setId_multa(int id_multa) {
-        this.id_multa = id_multa;
+    public void setIdMulta(int idMulta) {
+        this.idMulta = idMulta;
     }
 
-    public int getId_cliente() {
-        return id_cliente;
+    public int getIdCliente() {
+        return idCliente;
     }
 
-    public void setId_cliente(int id_cliente) {
-        this.id_cliente = id_cliente;
+    public void setIdCliente(int idCliente) {
+        this.idCliente = idCliente;
     }
 
     public String getDescricao() {
@@ -49,12 +40,25 @@ public class MultaBean {
         this.descricao = descricao;
     }
 
-    public float getValor() {
-        return valor;
-    }
-
     public void setValor(float valor) {
         this.valor = valor;
     }
-    
+
+    public String getNomeCliente() {
+        return nomeCliente;
+    }
+
+    public void setNomeCliente(String nomeCliente) {
+        this.nomeCliente = nomeCliente;
+    }
+
+    public double getValor() {
+        return valor;
+    }
+
+    public void setValor(double valor) {
+        this.valor = valor;
+    }
+    private String nomeCliente;
+
 }

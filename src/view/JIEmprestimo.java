@@ -12,10 +12,9 @@ import javax.swing.table.TableRowSorter;
 import Model.Bean.ClienteBean;
 import Model.Bean.EmprestimoBean;
 import Model.Bean.LivroBean;
-import model.Dao.ClienteDao;
-import model.Dao.EmprestimoDao;
-import model.Dao.LivrosDao;
-import utils.BdCliente;
+import model.DAO.ClienteDao;
+import model.DAO.EmprestimoDao;
+import model.DAO.LivrosDao;
 
 /**
  *
@@ -23,9 +22,6 @@ import utils.BdCliente;
  */
 public class JIEmprestimo extends javax.swing.JInternalFrame {
 
-    JFMulta enviaValor;
-    private JFPrincipal telaPrincipal;
-    boolean verifica = false;
     /**
      * Creates new form JIEmprestimo
      */

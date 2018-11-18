@@ -1,53 +1,22 @@
-/*
- * To change this license header, choose License Headers in Project Properties.
- * To change this template file, choose Tools | Templates
- * and open the template in the editor.
- */
-package model.Dao;
+package model.DAO;
 
 import Controller.Conexao;
+import Model.Bean.ClienteBean;
+import Model.Bean.MultaBean;
 import java.sql.Connection;
 import java.sql.PreparedStatement;
 import java.sql.ResultSet;
-import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import Model.Bean.ClienteBean;
 
-/**
- *
- * @author Aluno
- */
-public class ClienteDao {
+public class MultaDao {
+    Connection con; 
 
-    Connection con;
-
-    public ClienteDao() {
+    public MultaDao() {
         con = Conexao.getConnection();
-    }
-
-    public void create(ClienteBean d) {
-        PreparedStatement stmt = null;
-        try {
-            stmt = con.prepareStatement("INSERT INTO cliente(idCliente,nomeCliente,telefoneCliente,emailCliente,enderecoCliente,cpfCliente,sexo,dt_nascimentoCliente)VALUES(?,?,?,?,?,?,?,?)");
-            stmt.setInt(1, d.getId());
-            stmt.setString(2, d.getNome());
-            stmt.setString(3, d.getFone());
-            stmt.setString(4, d.getEmail());
-            stmt.setString(5, d.getEndereco());
-            stmt.setString(6, d.getCpf());
-            stmt.setString(7, d.getSexo());
-            stmt.setString(8, d.getDataNasc());
-
-            stmt.executeUpdate();
-
-            JOptionPane.showMessageDialog(null, "Salvo com sucesso");
-        } catch (Exception e) {
-            JOptionPane.showMessageDialog(null, "Erro ao Salvar " + e);
-        }
     }
 
     public List<ClienteBean> readTable() {
@@ -109,52 +78,101 @@ public class ClienteDao {
         }
         return clientes;
     }
+    
+    public List<MultaBean> readTableMulta() {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<MultaBean> multas = new ArrayList<>();
+        try {
+            stmt = con.prepareStatement("select multa.idMulta, cliente.nomeCliente, descricao, valorMulta from multa inner join cliente on multa.idMulta = cliente.idCliente;");
+            rs = stmt.executeQuery();
 
-    public void update(ClienteBean cli) {
-        // utilizar a classe que me permite executar sql
+            while (rs.next()) {
+                MultaBean multa = new MultaBean();
+                multa.setIdMulta(rs.getInt("multa.idMulta"));
+                multa.setNomeCliente(rs.getString("cliente.nomeCliente"));
+                multa.setDescricao(rs.getString("descricao"));
+                multa.setValor(rs.getDouble("valorMulta"));
+                multas.add(multa);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDao.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+        return multas;
+    }
+    
+    public void create(MultaBean d) {
         PreparedStatement stmt = null;
         try {
-            // digitar o comando UPDATE
-            stmt = con.prepareStatement("UPDATE cliente SET nomeCliente = ?, telefoneCliente = ?, emailCliente = ?, enderecoCliente = ?, cpfCliente = ?, sexo = ?, dt_nascimentoCliente = ? WHERE idCliente = ?");
+            stmt = con.prepareStatement("INSERT INTO multa(idMulta,idCliente,descricao,valorMulta)VALUES(?,?,?,?)");
+            stmt.setInt(1, d.getIdCliente());
+            stmt.setInt(2, d.getIdCliente());
+            stmt.setString(3, d.getDescricao());
+            stmt.setDouble(4, d.getValor());
 
-            stmt.setString(1, cli.getNome());
-            stmt.setString(2, cli.getFone());
-            stmt.setString(3, cli.getEmail());
-            stmt.setString(4, cli.getEndereco());
-            stmt.setString(5, cli.getCpf());
-            stmt.setString(6, cli.getSexo());
-            stmt.setString(7, cli.getDataNasc());
-            stmt.setInt(8, cli.getId());
             stmt.executeUpdate();
 
-            // executar esse sql
-            stmt.executeUpdate();
-
-            // mensagem informando que atualizou            
-            JOptionPane.showMessageDialog(null, "Atualizado com sucesso!");
-        } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao atualizar" + ex);
-        } finally {
-            Conexao.closeConnection(con, stmt);
+            JOptionPane.showMessageDialog(null, "Salvo com sucesso");
+        } catch (Exception e) {
+            JOptionPane.showMessageDialog(null, "Erro ao Salvar " + e);
         }
     }
+    
+    public void readValorTotal(int iID) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        try {
+            stmt = con.prepareStatement("select sum(valorMulta) from multa where idCliente ="+ iID +";");
+            rs = stmt.executeQuery();
 
-    public void delete(ClienteBean cli) {
+            while (rs.next()) {
+                MultaBean multa = new MultaBean();
+                multa.setValorTotal(rs.getDouble("sum(valorMulta)"));
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDao.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+    }
+    
+    public void delete(MultaBean mul) {
         // utilizar a classe que me permite executar sql
         PreparedStatement stmt = null;
         try {
             // digitar o comando delete
-            stmt = con.prepareStatement("DELETE FROM cliente WHERE idCliente = ?");
-            stmt.setInt(1, cli.getId());
+            stmt = con.prepareStatement("DELETE FROM multa WHERE idMulta = ?");
+            stmt.setInt(1, mul.getIdMulta());
             // executar esse sql
             stmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso!");
+            JOptionPane.showMessageDialog(null, "Multa excluida com sucesso!");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro ao excluir" + ex);
         } finally {
             Conexao.closeConnection(con, stmt);
         }
     }
+    
+    public void pagar(MultaBean mul) {
+        // utilizar a classe que me permite executar sql
+        PreparedStatement stmt = null;
+        try {
+            // digitar o comando delete
+            stmt = con.prepareStatement("DELETE FROM multa WHERE idMulta = ?");
+            stmt.setInt(1, mul.getIdMulta());
+            // executar esse sql
+            stmt.executeUpdate();
 
+            JOptionPane.showMessageDialog(null, "Multa recebida com sucesso!");
+        } catch (Exception ex) {
+            JOptionPane.showMessageDialog(null, "Erro ao excluir" + ex);
+        } finally {
+            Conexao.closeConnection(con, stmt);
+        }
+    }
 }

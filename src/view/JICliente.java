@@ -11,8 +11,7 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import Model.Bean.ClienteBean;
-import model.Dao.ClienteDao;
-import utils.BdCliente;
+import model.DAO.ClienteDao;
 
 /**
  *
@@ -433,7 +432,7 @@ public class JICliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBPesquisarActionPerformed
 
     private void jBPesquisar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisar1ActionPerformed
-
+        readTableForDesc(txtPesquisa.getText());
     }//GEN-LAST:event_jBPesquisar1ActionPerformed
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
@@ -443,7 +442,7 @@ public class JICliente extends javax.swing.JInternalFrame {
             ClienteDao cliDAO = new ClienteDao();// instancia a classe para execução do script
             cli.setId((int) JTCliente.getValueAt(JTCliente.getSelectedRow(), 0));
             cliDAO.delete(cli);//metódo para executar o delete
-            
+
             txtCPF.setText("");
             txtData.setText("");
             txtEndereco.setText("");
@@ -479,15 +478,14 @@ public class JICliente extends javax.swing.JInternalFrame {
             cbSexo.setSelectedIndex(-1);
 
             readTable();
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, "Selecione um cliente para atualizar!");
         }
     }//GEN-LAST:event_jBAlterarActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
         habilitaCampos();
-        
+
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
@@ -530,7 +528,7 @@ public class JICliente extends javax.swing.JInternalFrame {
     private void JTClienteMouseReleased(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_JTClienteMouseReleased
         // TODO add your handling code here:
         if (JTCliente.getSelectedRow() != -1) {
-            
+
             txtNome.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 1).toString());
             txtFone.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 2).toString());
             txtCPF.setText(JTCliente.getValueAt(JTCliente.getSelectedRow(), 3).toString());
@@ -542,7 +540,6 @@ public class JICliente extends javax.swing.JInternalFrame {
         }
     }//GEN-LAST:event_JTClienteMouseReleased
 
-    
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
     private javax.swing.JTable JTCliente;
@@ -618,6 +615,7 @@ public void readTable() {
             });
         }
     }
+
     // Desabilita os campos do formulário
     private void desabilitaCampos() {
         txtNome.setEnabled(false);
