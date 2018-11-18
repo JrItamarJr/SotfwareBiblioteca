@@ -19,9 +19,9 @@ import java.util.logging.Logger;
  */
 public class Conexao {
     private static final String DRIVER = "com.mysql.jdbc.Driver";
-    private static final String URL = "jdbc:mysql://localhost:3306/Biblioteca";
-    private static final String USER = "root";
-    private static final String PASS = "";
+    private static final String URL = "jdbc:mysql://alcenir.ddns.net:3306/Biblioteca";
+    private static final String USER = "alcenir";
+    private static final String PASS = "A@8406bs";
 
     public static Connection getConnection() {
         try {
