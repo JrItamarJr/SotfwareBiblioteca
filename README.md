@@ -1,4 +1,4 @@
-# SotfwareBiblioteca
+# Sotfware Biblioteca
 Projeto feito pela equipe de Desenvolvimento da Faculdade FASG - Praticas em Desenvolvimento de Software - 2018
 ![Gestao Biblioteca Logo](https://uploaddeimagens.com.br/images/001/731/326/full/fundo.png?1542418881)
 
@@ -122,4 +122,4 @@ o Software foi remodelado tendo grandes modificações em seu fonte. O resultado
 [Java Plugados](https://www.youtube.com/channel/UC_8SElusYdENzVw1Fsk0Nbg).
 
 
-#### Java Develops ####
+# Java Develops #
