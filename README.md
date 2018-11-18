@@ -99,7 +99,7 @@ o Software foi remodelado tendo grandes modificações em seu fonte. O resultado
   
   ![Visualização de Multas](https://image.ibb.co/h5OT5L/Tela-Multas.png)
  
-- ** Diagrama de Banco de Dados**
+- **Diagrama de Banco de Dados**
   - table Cliente;
   - table Multa;
   - table Livero;
