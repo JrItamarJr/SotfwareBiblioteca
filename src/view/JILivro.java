@@ -10,9 +10,9 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import model.Beam.Livro;
+import Model.Bean.LivroBean;
 import utils.BdLivro;
-import model.DAO.LivrosDAO;
+import model.Dao.LivrosDao;
 
 /**
  *
@@ -373,8 +373,8 @@ public class JILivro extends javax.swing.JInternalFrame {
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
         if(jTablePesquisa.getSelectedRow() != -1){
-            Livro liv = new Livro();
-            LivrosDAO livDAO = new LivrosDAO();
+            LivroBean liv = new LivroBean();
+            LivrosDao livDAO = new LivrosDao();
             liv.setId((int) jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(),0));
             livDAO.delete(liv);
             readTable();
@@ -385,8 +385,8 @@ public class JILivro extends javax.swing.JInternalFrame {
 
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
         if (jTablePesquisa.getSelectedRow() != -1) {
-            Livro liv = new Livro();
-            LivrosDAO livDAO = new LivrosDAO();
+            LivroBean liv = new LivroBean();
+            LivrosDao livDAO = new LivrosDao();
             liv.setAutor(txtautor.getText());
             liv.setAno(Integer.parseInt(txtano.getText()));
             liv.setDisponibilidade(txtdisponiblidade.getText());
@@ -403,8 +403,8 @@ public class JILivro extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
-        Livro liv = new Livro();
-        LivrosDAO livDAO = new LivrosDAO();
+        LivroBean liv = new LivroBean();
+        LivrosDao livDAO = new LivrosDao();
         liv.setAutor(txtautor.getText());
         liv.setAno(Integer.parseInt(txtano.getText()));
         liv.setDisponibilidade(txtdisponiblidade.getText());
@@ -475,9 +475,9 @@ public void readTable() {
         DefaultTableModel modelo = (DefaultTableModel) jTablePesquisa.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        LivrosDAO livDAO = new LivrosDAO();
+        LivrosDao livDAO = new LivrosDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Livro liv : livDAO.readTable()) {
+        for (LivroBean liv : livDAO.readTable()) {
             modelo.addRow(new Object[]{
                 liv.getId(),
                 liv.getExemplar(),
@@ -495,9 +495,9 @@ public void readTable() {
         DefaultTableModel modelo = (DefaultTableModel) jTablePesquisa.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        LivrosDAO livDAO = new LivrosDAO();
+        LivrosDao livDAO = new LivrosDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Livro liv : livDAO.readTableForDesc(desc)) {
+        for (LivroBean liv : livDAO.readTableForDesc(desc)) {
             modelo.addRow(new Object[]{
                 liv.getId(),
                 liv.getExemplar(),

@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.DAO;
+package model.Dao;
 
 import Controller.Conexao;
 import java.sql.Connection;
@@ -14,21 +14,21 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.Beam.Emprestimo;
+import Model.Bean.EmprestimoBean;
 
 /**
  *
  * @author Alcenir
  */
-public class EmprestimoDAO {
+public class EmprestimoDao {
 
     Connection con;
 
-    public EmprestimoDAO() {
+    public EmprestimoDao() {
         con = Conexao.getConnection();
     }
 
-    public void create(Emprestimo emp) {
+    public void create(EmprestimoBean emp) {
         PreparedStatement stmt = null;
         try {
             stmt = con.prepareStatement("INSERT INTO emprestimo(idCliente,idLivro,dtEmprestimo,dtDevolucao)VALUES(?,?,?,?)");
@@ -46,17 +46,17 @@ public class EmprestimoDAO {
         }
     }
 
-    public List<Emprestimo> readTable() {
+    public List<EmprestimoBean> readTable() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Emprestimo> emprestimos = new ArrayList<>();
+        List<EmprestimoBean> emprestimos = new ArrayList<>();
         try {
             stmt = con.prepareStatement("SELECT * FROM emprestimo INNER JOIN cliente ON cliente.idCliente = emprestimo.idCliente INNER JOIN livro ON livro.idLivro = emprestimo.idLivro;");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
                 
-                Emprestimo emp = new Emprestimo();
+                EmprestimoBean emp = new EmprestimoBean();
                 emp.setId_emprestimo(rs.getInt("idEmprestimo"));
                 emp.setNomeCliente(rs.getString("nomeCliente"));
                 emp.setNomeLivro(rs.getString("exemplarLivro"));
@@ -66,7 +66,7 @@ public class EmprestimoDAO {
                 emprestimos.add(emp);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ClienteDAO.class.getName())
+            Logger.getLogger(ClienteDao.class.getName())
                     .log(Level.SEVERE, null, ex);
         } finally {
             Conexao.closeConnection(con, stmt, rs);
@@ -74,10 +74,10 @@ public class EmprestimoDAO {
         return emprestimos;
     }
 
-    public List<Emprestimo> readTableForDesc(String desc) {
+    public List<EmprestimoBean> readTableForDesc(String desc) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Emprestimo> emprestimos = new ArrayList<>();
+        List<EmprestimoBean> emprestimos = new ArrayList<>();
         try {
             stmt = con.prepareStatement("SELECT * FROM emprestimo INNER JOIN cliente ON cliente.idCliente = emprestimo.idCliente INNER JOIN livro ON livro.idLivro = emprestimo.idLivro WHERE idEmprestimo LIKE ?;");
             
@@ -86,7 +86,7 @@ public class EmprestimoDAO {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Emprestimo emp = new Emprestimo();
+                EmprestimoBean emp = new EmprestimoBean();
                 emp.setId_emprestimo(rs.getInt("idEmprestimo"));
                 emp.setNomeCliente(rs.getString("nomeCliente"));
                 emp.setNomeLivro(rs.getString("exemplarLivro"));
@@ -96,7 +96,7 @@ public class EmprestimoDAO {
                 emprestimos.add(emp);
             }
         } catch (Exception ex) {
-            Logger.getLogger(LivrosDAO.class.getName())
+            Logger.getLogger(LivrosDao.class.getName())
                     .log(Level.SEVERE, null, ex);
         } finally {
             Conexao.closeConnection(con, stmt, rs);
@@ -104,7 +104,7 @@ public class EmprestimoDAO {
         return emprestimos;
     }
 
-    public void update(Emprestimo emp) {
+    public void update(EmprestimoBean emp) {
         // utilizar a classe que me permite executar sql
         PreparedStatement stmt = null;
         try {
@@ -130,7 +130,7 @@ public class EmprestimoDAO {
         }
     }
 
-    public void delete(Emprestimo emp) {
+    public void delete(EmprestimoBean emp) {
         // utilizar a classe que me permite executar sql
         PreparedStatement stmt = null;
         try {

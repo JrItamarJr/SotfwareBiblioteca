@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.DAO;
+package model.Dao;
 
 import Controller.Conexao;
 import java.sql.Connection;
@@ -14,19 +14,19 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.Beam.Livro;
+import Model.Bean.LivroBean;
 
 /**
  *
  * @author Alcenir
  */
-public class LivrosDAO {
+public class LivrosDao {
     Connection con;
 
-    public LivrosDAO() {
+    public LivrosDao() {
         con = Conexao.getConnection();
     }
-    public void create(Livro liv) {
+    public void create(LivroBean liv) {
         PreparedStatement stmt = null;
         try {
                 stmt = con.prepareStatement("INSERT INTO livro(autorLivro,exemplarLivro,edicaoLivro,anoLivro,disponibilidade)VALUES(?,?,?,?,?)");
@@ -44,16 +44,16 @@ public class LivrosDAO {
             JOptionPane.showMessageDialog(null, "Erro ao Salvar " + e);
         }
     }
-    public List<Livro> readTable() {
+    public List<LivroBean> readTable() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Livro> clientes = new ArrayList<>();
+        List<LivroBean> clientes = new ArrayList<>();
         try {
             stmt = con.prepareStatement("SELECT * FROM livro;");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Livro livros = new Livro();
+                LivroBean livros = new LivroBean();
                 livros.setId(rs.getInt("idLivro"));
                 
                 livros.setAutor(rs.getString("autorLivro"));
@@ -65,7 +65,7 @@ public class LivrosDAO {
                 clientes.add(livros);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ClienteDAO.class.getName())  
+            Logger.getLogger(ClienteDao.class.getName())  
                     .log(Level.SEVERE, null, ex);
         } finally {
             Conexao.closeConnection(con, stmt, rs);
@@ -73,10 +73,10 @@ public class LivrosDAO {
         return clientes;  
     }
 
-    public List<Livro> readTableForDesc(String desc) {
+    public List<LivroBean> readTableForDesc(String desc) {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Livro> clientes = new ArrayList<>();
+        List<LivroBean> clientes = new ArrayList<>();
         try {
             stmt = con.prepareStatement("SELECT * FROM livro WHERE exemplarLivro LIKE ?");
             stmt.setString(1, "%" + desc + "%"); 
@@ -84,7 +84,7 @@ public class LivrosDAO {
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Livro livros = new Livro();
+                LivroBean livros = new LivroBean();
                 livros.setId(rs.getInt("idLivro"));
                 
                 livros.setAutor(rs.getString("autorLivro"));
@@ -96,7 +96,7 @@ public class LivrosDAO {
                 clientes.add(livros);
             }
         } catch (Exception ex) {
-            Logger.getLogger(LivrosDAO.class.getName())
+            Logger.getLogger(LivrosDao.class.getName())
                     .log(Level.SEVERE, null, ex);
         } finally {
             Conexao.closeConnection(con, stmt, rs);
@@ -104,7 +104,7 @@ public class LivrosDAO {
         return clientes;
     }
 
-    public void update(Livro liv) {
+    public void update(LivroBean liv) {
         // utilizar a classe que me permite executar sql
         PreparedStatement stmt = null;
         try {
@@ -132,7 +132,7 @@ public class LivrosDAO {
         }
     }
 
-    public void delete(Livro liv) {
+    public void delete(LivroBean liv) {
         // utilizar a classe que me permite executar sql
         PreparedStatement stmt = null;
         try {

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.Beam;
+package Model.Bean;
 
 /**
  *
  * @author paulojp
  */
-public class Livro {
+public class LivroBean {
     
     private int id;
     private String exemplar;
@@ -53,7 +53,7 @@ public class Livro {
     public void setEditora(String editora) {
         this.editora = editora;
     }
-    public Livro(int id, String exemplar, String autor, byte edicao, short ano, String disponibilidade) {
+    public LivroBean(int id, String exemplar, String autor, byte edicao, short ano, String disponibilidade) {
         this.id = id;
         this.exemplar = exemplar;
         this.autor = autor;
@@ -62,7 +62,7 @@ public class Livro {
         this.disponibilidade = disponibilidade;
     }
 
-    public Livro() {
+    public LivroBean() {
     }   
     
     public int getId() {

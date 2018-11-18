@@ -3,7 +3,7 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.DAO;
+package model.Dao;
 
 import Controller.Conexao;
 import java.sql.Connection;
@@ -15,22 +15,24 @@ import java.util.List;
 import java.util.logging.Level;
 import java.util.logging.Logger;
 import javax.swing.JOptionPane;
-import model.Beam.Cliente;
+import Model.Bean.ClienteBean;
 
 /**
  *
  * @author Aluno
  */
-public class ClienteDAO {
+public class ClienteDao {
+
     Connection con;
 
-    public ClienteDAO() {
+    public ClienteDao() {
         con = Conexao.getConnection();
     }
-    public void create(Cliente d) {
+
+    public void create(ClienteBean d) {
         PreparedStatement stmt = null;
         try {
-                stmt = con.prepareStatement("INSERT INTO cliente(idCliente,nomeCliente,telefoneCliente,emailCliente,enderecoCliente,cpfCliente,sexo,dt_nascimentoCliente)VALUES(?,?,?,?,?,?,?,?)");
+            stmt = con.prepareStatement("INSERT INTO cliente(idCliente,nomeCliente,telefoneCliente,emailCliente,enderecoCliente,cpfCliente,sexo,dt_nascimentoCliente)VALUES(?,?,?,?,?,?,?,?)");
             stmt.setInt(1, d.getId());
             stmt.setString(2, d.getNome());
             stmt.setString(3, d.getFone());
@@ -47,55 +49,29 @@ public class ClienteDAO {
             JOptionPane.showMessageDialog(null, "Erro ao Salvar " + e);
         }
     }
-    public List<Cliente> readTable() {
+
+    public List<ClienteBean> readTable() {
         PreparedStatement stmt = null;
         ResultSet rs = null;
-        List<Cliente> clientes = new ArrayList<>();
+        List<ClienteBean> clientes = new ArrayList<>();
         try {
             stmt = con.prepareStatement("SELECT * FROM cliente;");
             rs = stmt.executeQuery();
 
             while (rs.next()) {
-                Cliente cliente = new Cliente();
+                ClienteBean cliente = new ClienteBean();
                 cliente.setId(rs.getInt("idCliente"));
                 cliente.setNome(rs.getString("nomeCliente"));
                 cliente.setFone(rs.getString("telefoneCliente"));
                 cliente.setCpf(rs.getString("cpfCliente"));
                 cliente.setSexo(rs.getString("sexo"));
                 cliente.setEndereco(rs.getString("enderecoCliente"));
+                cliente.setEmail(rs.getString("emailCliente"));
+                cliente.setDataNasc(rs.getString("dt_nascimentoCliente"));
                 clientes.add(cliente);
             }
         } catch (Exception ex) {
-            Logger.getLogger(ClienteDAO.class.getName())  
-                    .log(Level.SEVERE, null, ex);
-        } finally {
-            Conexao.closeConnection(con, stmt, rs);
-        }
-        return clientes;  
-    }
-
-    public List<Cliente> readTableForDesc(String desc) {
-        PreparedStatement stmt = null;
-        ResultSet rs = null;
-        List<Cliente> clientes = new ArrayList<>();
-        try {
-            stmt = con.prepareStatement("SELECT * FROM cliente WHERE nomeCliente LIKE ?");
-            stmt.setString(1, "%" + desc + "%"); 
-
-            rs = stmt.executeQuery();
-
-            while (rs.next()) {
-                Cliente cliente = new Cliente();
-                cliente.setId(rs.getInt("idCliente"));
-                cliente.setNome(rs.getString("nomeCliente"));
-                cliente.setFone(rs.getString("telefoneCliente"));
-                cliente.setCpf(rs.getString("cpfCliente"));
-                cliente.setSexo(rs.getString("sexo"));
-                cliente.setEndereco(rs.getString("enderecoCliente"));
-                clientes.add(cliente);
-            }
-        } catch (Exception ex) {
-            Logger.getLogger(ClienteDAO.class.getName())
+            Logger.getLogger(ClienteDao.class.getName())
                     .log(Level.SEVERE, null, ex);
         } finally {
             Conexao.closeConnection(con, stmt, rs);
@@ -103,13 +79,44 @@ public class ClienteDAO {
         return clientes;
     }
 
-    public void update(Cliente cli) {
+    public List<ClienteBean> readTableForDesc(String desc) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<ClienteBean> clientes = new ArrayList<>();
+        try {
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE nomeCliente LIKE ?");
+            stmt.setString(1, "%" + desc + "%");
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ClienteBean cliente = new ClienteBean();
+                cliente.setId(rs.getInt("idCliente"));
+                cliente.setNome(rs.getString("nomeCliente"));
+                cliente.setFone(rs.getString("telefoneCliente"));
+                cliente.setCpf(rs.getString("cpfCliente"));
+                cliente.setSexo(rs.getString("sexo"));
+                cliente.setEndereco(rs.getString("enderecoCliente"));
+                cliente.setEmail(rs.getString("emailCliente"));
+                cliente.setDataNasc(rs.getString("dt_nascimentoCliente"));
+                clientes.add(cliente);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDao.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+        return clientes;
+    }
+
+    public void update(ClienteBean cli) {
         // utilizar a classe que me permite executar sql
         PreparedStatement stmt = null;
         try {
             // digitar o comando UPDATE
             stmt = con.prepareStatement("UPDATE cliente SET nomeCliente = ?, telefoneCliente = ?, emailCliente = ?, enderecoCliente = ?, cpfCliente = ?, sexo = ?, dt_nascimentoCliente = ? WHERE idCliente = ?");
-            
+
             stmt.setString(1, cli.getNome());
             stmt.setString(2, cli.getFone());
             stmt.setString(3, cli.getEmail());
@@ -132,7 +139,7 @@ public class ClienteDAO {
         }
     }
 
-    public void delete(Cliente cli) {
+    public void delete(ClienteBean cli) {
         // utilizar a classe que me permite executar sql
         PreparedStatement stmt = null;
         try {
@@ -142,12 +149,12 @@ public class ClienteDAO {
             // executar esse sql
             stmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso!");           
+            JOptionPane.showMessageDialog(null, "Cliente excluido com sucesso!");
         } catch (Exception ex) {
             JOptionPane.showMessageDialog(null, "Erro ao excluir" + ex);
         } finally {
-            Conexao.closeConnection(con, stmt); 
+            Conexao.closeConnection(con, stmt);
         }
-    }  
+    }
 
 }

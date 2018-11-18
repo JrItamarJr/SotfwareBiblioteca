@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.Beam;
+package Model.Bean;
 
 /**
  *
  * @author paulojp
  */
-public class Cliente {
+public class ClienteBean {
     
     private int id;
     private String nome;
@@ -28,7 +28,7 @@ public class Cliente {
         this.email = email;
     }
 
-    public Cliente(String nome, String dataNasc, String sexo, String cpf, String endereco, String fone) {
+    public ClienteBean(String nome, String dataNasc, String sexo, String cpf, String endereco, String fone) {
         this.nome = nome;
         this.dataNasc = dataNasc;
         this.sexo = sexo;
@@ -37,7 +37,7 @@ public class Cliente {
         this.fone = fone;
     }
     
-     public Cliente() {
+     public ClienteBean() {
     }  
 
     public int getId() {

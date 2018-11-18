@@ -9,12 +9,12 @@ package view;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import model.Beam.Cliente;
-import model.Beam.Emprestimo;
-import model.Beam.Livro;
-import model.DAO.ClienteDAO;
-import model.DAO.EmprestimoDAO;
-import model.DAO.LivrosDAO;
+import Model.Bean.ClienteBean;
+import Model.Bean.EmprestimoBean;
+import Model.Bean.LivroBean;
+import model.Dao.ClienteDao;
+import model.Dao.EmprestimoDao;
+import model.Dao.LivrosDao;
 import utils.BdCliente;
 
 /**
@@ -586,8 +586,8 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBNovo1ActionPerformed
 
     private void jBCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrar1ActionPerformed
-        EmprestimoDAO empDAO = new EmprestimoDAO();
-        Emprestimo emp = new Emprestimo();
+        EmprestimoDao empDAO = new EmprestimoDao();
+        EmprestimoBean emp = new EmprestimoBean();
         emp.setId_cliente(Integer.parseInt(txtClienteID.getText()));
         emp.setId_livro(Integer.parseInt(txtLivroID.getText()));
         emp.setData_emprestimo(txtDataSaida.getText());
@@ -662,9 +662,9 @@ public void readTableLivros() {
         DefaultTableModel modelolivro = (DefaultTableModel) jTableLivro.getModel();
         modelolivro.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        LivrosDAO livDAO = new LivrosDAO();
+        LivrosDao livDAO = new LivrosDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Livro liv : livDAO.readTable()) {
+        for (LivroBean liv : livDAO.readTable()) {
             modelolivro.addRow(new Object[]{
                 liv.getId(),
                 liv.getExemplar()
@@ -678,9 +678,9 @@ public void readTableLivros() {
         DefaultTableModel modelo = (DefaultTableModel) jTableLivro.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        LivrosDAO livDAO = new LivrosDAO();
+        LivrosDao livDAO = new LivrosDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Livro liv : livDAO.readTableForDesc(desc)) {
+        for (LivroBean liv : livDAO.readTableForDesc(desc)) {
             modelo.addRow(new Object[]{
                 liv.getId(),
                 liv.getExemplar()
@@ -691,9 +691,9 @@ public void readTableClientes() {
         DefaultTableModel modelocliente = (DefaultTableModel) jTableCliente.getModel();
         modelocliente.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        ClienteDAO cliDAO = new ClienteDAO();
+        ClienteDao cliDAO = new ClienteDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Cliente cli : cliDAO.readTable()) {
+        for (ClienteBean cli : cliDAO.readTable()) {
             modelocliente.addRow(new Object[]{
                 cli.getId(),
                 cli.getNome()
@@ -706,9 +706,9 @@ public void readTableClientes() {
         DefaultTableModel modelocliente = (DefaultTableModel) jTableCliente.getModel();
         modelocliente.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        ClienteDAO cliDAO = new ClienteDAO();
+        ClienteDao cliDAO = new ClienteDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Cliente cli : cliDAO.readTableForDesc(desc)) {
+        for (ClienteBean cli : cliDAO.readTableForDesc(desc)) {
             modelocliente.addRow(new Object[]{
                 cli.getId(),
                 cli.getNome()
@@ -719,9 +719,9 @@ public void readTableClientes() {
         DefaultTableModel modelo = (DefaultTableModel) jTableEmprestimo.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        EmprestimoDAO empDAO = new EmprestimoDAO();
+        EmprestimoDao empDAO = new EmprestimoDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Emprestimo emp : empDAO.readTable()) {
+        for (EmprestimoBean emp : empDAO.readTable()) {
             modelo.addRow(new Object[]{
                 emp.getId_emprestimo(),
                 emp.getNomeCliente(),
@@ -738,9 +738,9 @@ public void readTableClientes() {
         DefaultTableModel modelo = (DefaultTableModel) jTableEmprestimo.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        EmprestimoDAO empDAO = new EmprestimoDAO();
+        EmprestimoDao empDAO = new EmprestimoDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Emprestimo emp : empDAO.readTableForDesc(desc)) {
+        for (EmprestimoBean emp : empDAO.readTableForDesc(desc)) {
             modelo.addRow(new Object[]{
                 emp.getId_emprestimo(),
                 emp.getNomeCliente(),

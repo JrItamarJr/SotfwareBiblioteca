@@ -10,8 +10,8 @@ import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
-import model.Beam.Cliente;
-import model.DAO.ClienteDAO;
+import Model.Bean.ClienteBean;
+import model.Dao.ClienteDao;
 import utils.BdCliente;
 
 /**
@@ -439,8 +439,8 @@ public class JICliente extends javax.swing.JInternalFrame {
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
 
         if (JTCliente.getSelectedRow() != -1) {// se JTprodutos estiver algo selecionado
-            Cliente cli = new Cliente();
-            ClienteDAO cliDAO = new ClienteDAO();// instancia a classe para execução do script
+            ClienteBean cli = new ClienteBean();
+            ClienteDao cliDAO = new ClienteDao();// instancia a classe para execução do script
             cli.setId((int) JTCliente.getValueAt(JTCliente.getSelectedRow(), 0));
             cliDAO.delete(cli);//metódo para executar o delete
             
@@ -449,6 +449,7 @@ public class JICliente extends javax.swing.JInternalFrame {
             txtEndereco.setText("");
             txtFone.setText("");
             txtNome.setText("");
+            txtEmail.setText("");
             readTable();
 
         } else {
@@ -458,8 +459,8 @@ public class JICliente extends javax.swing.JInternalFrame {
 
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
         if (JTCliente.getSelectedRow() != -1) {
-            Cliente cli = new Cliente();
-            ClienteDAO cliDAO = new ClienteDAO();
+            ClienteBean cli = new ClienteBean();
+            ClienteDao cliDAO = new ClienteDao();
             cli.setNome(txtNome.getText());
             cli.setCpf(txtCPF.getText());
             cli.setDataNasc(txtData.getText());
@@ -474,6 +475,7 @@ public class JICliente extends javax.swing.JInternalFrame {
             txtEndereco.setText("");
             txtFone.setText("");
             txtNome.setText("");
+            txtEmail.setText("");
             cbSexo.setSelectedIndex(-1);
 
             readTable();
@@ -489,8 +491,8 @@ public class JICliente extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
-        Cliente cli = new Cliente();
-        ClienteDAO cliDAO = new ClienteDAO();
+        ClienteBean cli = new ClienteBean();
+        ClienteDao cliDAO = new ClienteDao();
         cli.setNome(txtNome.getText());
         cli.setCpf(txtCPF.getText());
         cli.setDataNasc(txtData.getText());
@@ -580,9 +582,9 @@ public void readTable() {
         DefaultTableModel modelo = (DefaultTableModel) JTCliente.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        ClienteDAO cliDAO = new ClienteDAO();
+        ClienteDao cliDAO = new ClienteDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Cliente cli : cliDAO.readTable()) {
+        for (ClienteBean cli : cliDAO.readTable()) {
             modelo.addRow(new Object[]{
                 cli.getId(),
                 cli.getNome(),
@@ -601,9 +603,9 @@ public void readTable() {
         DefaultTableModel modelo = (DefaultTableModel) JTCliente.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
-        ClienteDAO cliDAO = new ClienteDAO();
+        ClienteDao cliDAO = new ClienteDao();
         // metodo para trazer os produtos e adicionar as linhas
-        for (Cliente cli : cliDAO.readTableForDesc(desc)) {
+        for (ClienteBean cli : cliDAO.readTableForDesc(desc)) {
             modelo.addRow(new Object[]{
                 cli.getId(),
                 cli.getNome(),
@@ -624,6 +626,7 @@ public void readTable() {
         txtFone.setEnabled(false);
         cbSexo.setEnabled(false);
         txtEmail.setEnabled(false);
+        txtData.setEnabled(false);
     }
 
     // Habilita os campos do formulário
@@ -635,5 +638,6 @@ public void readTable() {
         txtFone.setEnabled(true);
         cbSexo.setEnabled(true);
         txtEmail.setEnabled(true);
+        txtData.setEnabled(true);
     }
 }

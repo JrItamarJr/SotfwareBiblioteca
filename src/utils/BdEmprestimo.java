@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Beam.Emprestimo;
+import Model.Bean.EmprestimoBean;
 
 /**
  *
@@ -34,7 +34,7 @@ public class BdEmprestimo {
     /* ----EMPRESTIMO-> */
     
     // CREATE - Adiciona um registro
-    public void adicionaEmprestimo(Emprestimo e) throws SQLException {
+    public void adicionaEmprestimo(EmprestimoBean e) throws SQLException {
         // Prepara conexão p/ receber o comando SQL
         String sql = "INSERT INTO emprestimo(id_cliente, id_livro, data_emprestimo, data_devolucao) VALUES(?, ?, ?, ?)";       
         PreparedStatement stmt;
@@ -54,7 +54,7 @@ public class BdEmprestimo {
     }
     
     // SELECT - Retorna uma lista com o resultado da consulta
-    public List<Emprestimo> getLista(String id) throws SQLException{
+    public List<EmprestimoBean> getLista(String id) throws SQLException{
         // Prepara conexão p/ receber o comando SQL
         String sql = "SELECT * FROM emprestimo WHERE id_emprestimo like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
@@ -63,12 +63,12 @@ public class BdEmprestimo {
         // Recebe o resultado da consulta SQL
         ResultSet rs = stmt.executeQuery();
         
-        List<Emprestimo> lista = new ArrayList<>();
+        List<EmprestimoBean> lista = new ArrayList<>();
         
         // Enquanto existir registros, pega os valores do ReultSet e vai adicionando na lista
         while(rs.next()) {
             //  A cada loop, é instanciado um novo objeto, p/ servir de ponte no envio de registros p/ a lista
-            Emprestimo e = new Emprestimo();
+            EmprestimoBean e = new EmprestimoBean();
             
             // "c" -> Registro novo - .setNome recebe o campo do banco de String "nome" 
             e.setId_emprestimo(Integer.valueOf(rs.getString("id_emprestimo")));
@@ -90,7 +90,7 @@ public class BdEmprestimo {
     }
     
     // SELECT - Retorna uma lista com as multas de um clientes epecífico
-    public List<Emprestimo> getListaPorCliente(String id_cliente) throws SQLException{
+    public List<EmprestimoBean> getListaPorCliente(String id_cliente) throws SQLException{
         // Prepara conexão p/ receber o comando SQL
         String sql = "SELECT emprestimo.id_emprestimo, emprestimo.id_cliente, emprestimo.id_livro, emprestimo.data_emprestimo, emprestimo.data_devolucao" +
                     " FROM emprestimo" +
@@ -103,12 +103,12 @@ public class BdEmprestimo {
         // Recebe o resultado da consulta SQL
         ResultSet rs = stmt.executeQuery();
         
-        List<Emprestimo> lista = new ArrayList<>();
+        List<EmprestimoBean> lista = new ArrayList<>();
         
         // Enquanto existir registros, pega os valores do ReultSet e vai adicionando na lista
         while(rs.next()) {
             //  A cada loop, é instanciado um novo objeto, p/ servir de ponte no envio de registros p/ a lista
-            Emprestimo e = new Emprestimo();
+            EmprestimoBean e = new EmprestimoBean();
             
             // "c" -> Registro novo - .setNome recebe o campo do banco de String "nome" 
             e.setId_emprestimo(Integer.valueOf(rs.getString("emprestimo.id_emprestimo")));

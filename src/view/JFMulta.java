@@ -13,8 +13,8 @@ import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import utils.BdCliente;
 import utils.BdMulta;
-import model.Beam.Cliente;
-import model.Beam.Multa;
+import Model.Bean.ClienteBean;
+import Model.Bean.MultaBean;
 
 
 /**
@@ -457,7 +457,7 @@ public class JFMulta extends javax.swing.JFrame {
                     desc = "Perda";
                 }
 
-                Multa m = new Multa();
+                MultaBean m = new MultaBean();
 
                 m.setId_cliente(Integer.valueOf(jT1IdCliente.getText()));
                 m.setDescricao(desc);
@@ -499,7 +499,7 @@ public class JFMulta extends javax.swing.JFrame {
     // Configura campos da tabela de pesquisas de acordo com os campos do Cliente
     DefaultTableModel tmCliente = new DefaultTableModel(null, new String[]{"Id", "Nome", "CPF"});    
     // Lista de clientes, recebe os registros retornados da pesquisa
-    List<Cliente> clientes;  
+    List<ClienteBean> clientes;  
     
     // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
     private void listaContatosCliente() throws SQLException {        
@@ -512,7 +512,7 @@ public class JFMulta extends javax.swing.JFrame {
     }
     
     // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisaCliente(List<Cliente> clientes) {
+    private void mostraPesquisaCliente(List<ClienteBean> clientes) {
         // Limpa a tabela sempre que for solicitado uma nova pesquisa
         limpaTabelaCliente();
         
@@ -544,7 +544,7 @@ public class JFMulta extends javax.swing.JFrame {
     // Configura campos da tabela de pesquisas de acordo com os campos das Multas
     DefaultTableModel tmMulta = new DefaultTableModel(null, new String[]{"ID Multa", "Nome Cliente", "Descrição", "Valor"});
     // Lista de multas, recebe os registros retornados da pesquisa
-    List<Multa> multas;
+    List<MultaBean> multas;
     
     // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
     private void listaContatosMulta() throws SQLException {         
@@ -557,7 +557,7 @@ public class JFMulta extends javax.swing.JFrame {
     }
     
     // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisaMulta(List<Multa> multas) throws SQLException {
+    private void mostraPesquisaMulta(List<MultaBean> multas) throws SQLException {
         // Limpa a tabela sempre que for solicitado uma nova pesquisa
         limpaTabelaMulta();
         

@@ -3,13 +3,13 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.Beam;
+package Model.Bean;
 
 /**
  *
  * @author paulojp
  */
-public class Emprestimo {
+public class EmprestimoBean {
     
     private int id_emprestimo;
     private int id_cliente;
@@ -35,10 +35,10 @@ public class Emprestimo {
         this.nomeCliente = nomeCliente;
     }
 
-    public Emprestimo() {
+    public EmprestimoBean() {
     }   
 
-    public Emprestimo(int id_emprestimo, int id_cliente, int id_livro, String data_emprestimo, String data_devolucao) {
+    public EmprestimoBean(int id_emprestimo, int id_cliente, int id_livro, String data_emprestimo, String data_devolucao) {
         this.id_emprestimo = id_emprestimo;
         this.id_cliente = id_cliente;
         this.id_livro = id_livro;

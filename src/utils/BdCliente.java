@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Beam.Cliente;
+import Model.Bean.ClienteBean;
 
 /**
  *
@@ -34,7 +34,7 @@ public class BdCliente {
     /* ----CLIENTE-> */
     
     // CREATE - Adiciona um registro
-    public void adicionaCliente(Cliente c) throws SQLException {
+    public void adicionaCliente(ClienteBean c) throws SQLException {
         // Prepara conexão p/ receber o comando SQL
         String sql = "INSERT INTO cliente(nome, data_nasc, sexo, cpf, endereco, fone)"
                 + "VALUES(?, ?, ?, ?, ?, ?)";       
@@ -57,7 +57,7 @@ public class BdCliente {
     }
     
     // SELECT - Retorna uma lista com o resultado da consulta
-    public List<Cliente> getLista(String nome) throws SQLException{
+    public List<ClienteBean> getLista(String nome) throws SQLException{
         // Prepara conexão p/ receber o comando SQL
         String sql = "SELECT * FROM cliente WHERE nome like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
@@ -66,12 +66,12 @@ public class BdCliente {
         // Recebe o resultado da consulta SQL
         ResultSet rs = stmt.executeQuery();
         
-        List<Cliente> lista = new ArrayList<>();
+        List<ClienteBean> lista = new ArrayList<>();
         
         // Enquanto existir registros, pega os valores do ReultSet e vai adicionando na lista
         while(rs.next()) {
             //  A cada loop, é instanciado um novo objeto, p/ servir de ponte no envio de registros p/ a lista
-            Cliente c = new Cliente();
+            ClienteBean c = new ClienteBean();
             
             // "c" -> Cliente novo - .setNome recebe o campo do banco de String "nome" 
             c.setId(Integer.valueOf(rs.getString("id_cliente")));
@@ -97,7 +97,7 @@ public class BdCliente {
     }
        
     // UPDATE - Atualiza registros
-    public void altera(Cliente c) throws SQLException {
+    public void altera(ClienteBean c) throws SQLException {
         // Prepara conexão p/ receber o comando SQL
         String sql = "UPDATE cliente set nome=?, data_nasc=?, sexo=?, cpf=?, endereco=?, fone=?"
                 + "WHERE id_cliente=?";

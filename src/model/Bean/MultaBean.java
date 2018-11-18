@@ -3,26 +3,26 @@
  * To change this template file, choose Tools | Templates
  * and open the template in the editor.
  */
-package model.Beam;
+package Model.Bean;
 
 /**
  *
  * @author paulojp
  */
-public class Multa {
+public class MultaBean {
     private int id_multa;
     private int id_cliente;
     private String descricao;
     private float valor;
 
-    public Multa(int id_multa, int id_emprestimo, String descricao, float valor, String pagamento) {
+    public MultaBean(int id_multa, int id_emprestimo, String descricao, float valor, String pagamento) {
         this.id_multa = id_multa;
         this.id_cliente = id_emprestimo;
         this.descricao = descricao;
         this.valor = valor;
     }
 
-    public Multa() {
+    public MultaBean() {
     }
 
     public int getId_multa() {

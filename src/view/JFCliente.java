@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.Beam.Cliente;
+import Model.Bean.ClienteBean;
 import utils.BdCliente;
 
 
@@ -423,7 +423,7 @@ public class JFCliente extends javax.swing.JFrame {
             // Antes de cadastrar, verifica se os campos foram preenchidos
             if (verificaDados()) {
                 try {
-                    Cliente c = new Cliente();
+                    ClienteBean c = new ClienteBean();
                     
                     c.setNome(jT1Nome.getText());
                     c.setDataNasc(data());
@@ -476,7 +476,7 @@ public class JFCliente extends javax.swing.JFrame {
     
     // Edita os campos e colunas da tabela de resultados
     DefaultTableModel tmCliente = new DefaultTableModel(null, new String[]{"Id", "Nome", "Data Nasc.", "Sexo", "CPF", "Endereço", "Fone"});
-    List<Cliente> clientes;
+    List<ClienteBean> clientes;
         
     
     // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
@@ -491,7 +491,7 @@ public class JFCliente extends javax.swing.JFrame {
     }
     
     // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisa(List<Cliente> clientes) {
+    private void mostraPesquisa(List<ClienteBean> clientes) {
         // Limpa a tabela sempre que for solicitado uma nova pesquisa
         limparTabela();
         
@@ -569,7 +569,7 @@ public class JFCliente extends javax.swing.JFrame {
 
             // Se a confirmação for SIM
             if (resp == JOptionPane.YES_NO_OPTION) {                
-                Cliente c = new Cliente();
+                ClienteBean c = new ClienteBean();
                 BdCliente d = new BdCliente();
                 
                 c.setId(Integer.valueOf(jT0Id.getText()));

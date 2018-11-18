@@ -9,7 +9,7 @@ import java.sql.SQLException;
 import java.util.List;
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
-import model.Beam.Livro;
+import Model.Bean.LivroBean;
 import utils.BdLivro;
 
 
@@ -382,7 +382,7 @@ public class JFLivro extends javax.swing.JFrame {
             // Antes de cadastrar, verifica se os campos foram preenchidos
             if (verificaDados()) {
                 try {
-                    Livro l = new Livro();
+                    LivroBean l = new LivroBean();
 
                     l.setExemplar(jT1Exemplar.getText());
                     l.setAutor(jT2Autor.getText());
@@ -428,7 +428,7 @@ public class JFLivro extends javax.swing.JFrame {
     
     // Edita os campos e colunas da tabela de resultados
     DefaultTableModel tmLivro = new DefaultTableModel(null, new String[]{"Id", "Exemplar", "Autor", "Edição", "Ano", "Disponibilidade"});
-    List<Livro> livros;
+    List<LivroBean> livros;
     
     // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
     private void listaContatos() throws SQLException {
@@ -442,7 +442,7 @@ public class JFLivro extends javax.swing.JFrame {
     }
     
     // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisa(List<Livro> livros) {
+    private void mostraPesquisa(List<LivroBean> livros) {
         // Limpa a tabela sempre que for solicitado uma nova pesquisa
         limparTabela();
         
@@ -526,7 +526,7 @@ public class JFLivro extends javax.swing.JFrame {
 
             // Se a confirmação for SIM
             if (resp == JOptionPane.YES_NO_OPTION) {                
-                Livro l = new Livro();
+                LivroBean l = new LivroBean();
                 BdLivro d = new BdLivro();
                 
                 l.setId(Integer.valueOf(jT0Id.getText()));

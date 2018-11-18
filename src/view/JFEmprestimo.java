@@ -21,9 +21,9 @@ import javax.swing.table.DefaultTableModel;
 import utils.BdCliente;
 import utils.BdEmprestimo;
 import utils.BdLivro;
-import model.Beam.Cliente;
-import model.Beam.Emprestimo;
-import model.Beam.Livro;
+import Model.Bean.ClienteBean;
+import Model.Bean.EmprestimoBean;
+import Model.Bean.LivroBean;
 
 
 /**
@@ -545,7 +545,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
                     BdEmprestimo d = new BdEmprestimo();
                     if (!d.verificaMultaCliente(pegaIdCliente())) {
                         try {
-                            Emprestimo e = new Emprestimo();
+                            EmprestimoBean e = new EmprestimoBean();
 
                             e.setId_cliente(Integer.valueOf(jT1IdCliente.getText()));
                             e.setId_livro(Integer.valueOf(jT2IdLivro.getText()));
@@ -699,7 +699,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
     // Configura campos da tabela de pesquisas de acordo com os campos do Cliente
     DefaultTableModel tmCliente = new DefaultTableModel(null, new String[]{"Id", "Nome", "CPF"});    
     // Lista de clientes, recebe os registros retornados da pesquisa
-    List<Cliente> clientes;  
+    List<ClienteBean> clientes;  
     
     // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
     private void listaContatosCliente() throws SQLException {        
@@ -712,7 +712,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
     }
     
     // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisaCliente(List<Cliente> clientes) {
+    private void mostraPesquisaCliente(List<ClienteBean> clientes) {
         // Limpa a tabela sempre que for solicitado uma nova pesquisa
         limpaTabelaCliente();
         
@@ -744,7 +744,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
     // Configura campos da tabela de pesquisas de acordo com os campos dos Empréstimos
     DefaultTableModel tmEmprestimo = new DefaultTableModel(null, new String[]{"ID", "ID Cliente", "ID Livro", "Data Emprestimo", "Data Devolução"});
     // Lista de empréstimos, recebe os registros retornados da pesquisa
-    List<Emprestimo> emprestimos;
+    List<EmprestimoBean> emprestimos;
     
     // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
     private void listaContatosEmprestimo() throws SQLException { 
@@ -757,7 +757,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
     }
     
     // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisaEmprestimo(List<Emprestimo> emprestimos) {
+    private void mostraPesquisaEmprestimo(List<EmprestimoBean> emprestimos) {
         // Limpa a tabela sempre que for solicitado uma nova pesquisa
         limpaTabelaEmprestimo();
         
@@ -789,7 +789,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
     /* ----LIVRO-> */    
     // Edita os campos e colunas da tabela de resultados
     DefaultTableModel tmLivro = new DefaultTableModel(null, new String[]{"Id", "Exemplar", "Autor", "Disponibilidade"});
-    List<Livro> livros;
+    List<LivroBean> livros;
     
     // Lista a quantidade de resultado, de acordo com o nome passado no campo pesquisa
     private void listaContatosLivro() throws SQLException {
@@ -802,7 +802,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
     }
     
     // Mostra a lista de resultado de acordo com o nome passado no campo pesquisa
-    private void mostraPesquisaLivro(List<Livro> livros) {
+    private void mostraPesquisaLivro(List<LivroBean> livros) {
         // Limpa a tabela sempre que for solicitado uma nova pesquisa
         limpaTabelaLivro();
         
@@ -876,7 +876,7 @@ public class JFEmprestimo extends javax.swing.JFrame {
     // Altera a disponibilidade do livro
     private void alteraDisponibilidade(String status) throws SQLException {
         if ((jTableCliente.getSelectedRow() != -1) || (jTableLivro.getSelectedRow() != -1)) {  
-                Livro l = new Livro();
+                LivroBean l = new LivroBean();
                 BdLivro d = new BdLivro();             
                 
                 // Recebe o id do livro, que está sendo exibido no formulário

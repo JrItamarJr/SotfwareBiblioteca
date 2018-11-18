@@ -11,7 +11,7 @@ import java.sql.ResultSet;
 import java.sql.SQLException;
 import java.util.ArrayList;
 import java.util.List;
-import model.Beam.Multa;
+import Model.Bean.MultaBean;
 
 /**
  *
@@ -34,7 +34,7 @@ public class BdMulta {
     /* ----MULTA-> */
     
     // CREATE - Adiciona um registro
-    public void adicionaMulta(Multa m) throws SQLException {
+    public void adicionaMulta(MultaBean m) throws SQLException {
         // Prepara conexão p/ receber o comando SQL
         String sql = "INSERT INTO multa(id_cliente, descricao, valor) VALUES(?, ?, ?)";       
         PreparedStatement stmt;
@@ -53,7 +53,7 @@ public class BdMulta {
     }
     
     // SELECT - Retorna uma lista com o resultado da consulta
-    public List<Multa> getLista(String id) throws SQLException{
+    public List<MultaBean> getLista(String id) throws SQLException{
         // Prepara conexão p/ receber o comando SQL
         String sql = "SELECT * FROM multa WHERE id_multa like ?";
         PreparedStatement stmt = this.conexao.prepareStatement(sql);
@@ -62,12 +62,12 @@ public class BdMulta {
         // Recebe o resultado da consulta SQL
         ResultSet rs = stmt.executeQuery();
         
-        List<Multa> lista = new ArrayList<>();
+        List<MultaBean> lista = new ArrayList<>();
         
         // Enquanto existir registros, pega os valores do ReultSet e vai adicionando na lista
         while(rs.next()) {
             //  A cada loop, é instanciado um novo objeto, p/ servir de ponte no envio de registros p/ a lista
-            Multa m = new Multa();
+            MultaBean m = new MultaBean();
             
             // "c" -> Registro novo - .setNome recebe o campo do banco de String "nome" 
             m.setId_multa(Integer.valueOf(rs.getString("id_multa")));
@@ -88,7 +88,7 @@ public class BdMulta {
     }
     
     // SELECT - Retorna uma lista com as multas de um determinado cliente
-    public List<Multa> getListaMultaPorCliente(String id_cliente) throws SQLException{  
+    public List<MultaBean> getListaMultaPorCliente(String id_cliente) throws SQLException{  
         // Prepara conexão p/ receber o comando SQL
         String sql = "SELECT multa.id_multa, multa.id_cliente, multa.descricao, multa.valor " +
                     "FROM multa " +
@@ -101,12 +101,12 @@ public class BdMulta {
         // Recebe o resultado da consulta SQL
         ResultSet rs = stmt.executeQuery();
         
-        List<Multa> lista = new ArrayList<>();
+        List<MultaBean> lista = new ArrayList<>();
         
         // Enquanto existir registros, pega os valores do ReultSet e vai adicionando na lista
         while(rs.next()) {
             //  A cada loop, é instanciado um novo objeto, p/ servir de ponte no envio de registros p/ a lista
-            Multa m = new Multa();
+            MultaBean m = new MultaBean();
             
             // "c" -> Registro novo - .setNome recebe o campo do banco de String "nome" 
             m.setId_multa(Integer.valueOf(rs.getString("multa.id_multa")));
