@@ -99,6 +99,14 @@ o Software foi remodelado tendo grandes modificações em seu fonte. O resultado
   
   ![Visualização de Multas](https://image.ibb.co/h5OT5L/Tela-Multas.png)
  
+- ** Diagrama de Banco de Dados**
+  - table Cliente;
+  - table Multa;
+  - table Livero;
+  - table Emprestimo
+  - table Usuario.
+  
+  ![Diagrama de Banco](https://image.ibb.co/foS2H0/Diagrama-Banco.png)
 
 
 **\*-** Este projeto foi baseado em um já existente pelo pelo aluno de ADS **Paulo JP** [Projeto Original](https://github.com/paulojp-dev/projeto-biblioteca-java).
