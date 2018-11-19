@@ -53,6 +53,7 @@ o Software foi remodelado tendo grandes modificações em seu fonte. O resultado
   - Validações de permissões por usuario;
   - Ações para exibir as Jenelas;
   - Ação para imperdir que a mesma tela seja aberta duas vezes;
+  - User: admin Password: 123
   - **JFrame**.
   
   ![Tela Principal](https://image.ibb.co/inPi4f/Tela-Principal.png)
