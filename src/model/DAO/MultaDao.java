@@ -79,6 +79,37 @@ public class MultaDao {
         return clientes;
     }
     
+    public List<ClienteBean> readTableForCpf(String desc) {
+        PreparedStatement stmt = null;
+        ResultSet rs = null;
+        List<ClienteBean> clientes = new ArrayList<>();
+        try {
+            stmt = con.prepareStatement("SELECT * FROM cliente WHERE cpfCliente = ?");
+            stmt.setString(1, desc );
+
+            rs = stmt.executeQuery();
+
+            while (rs.next()) {
+                ClienteBean cliente = new ClienteBean();
+                cliente.setId(rs.getInt("idCliente"));
+                cliente.setNome(rs.getString("nomeCliente"));
+                cliente.setFone(rs.getString("telefoneCliente"));
+                cliente.setCpf(rs.getString("cpfCliente"));
+                cliente.setSexo(rs.getString("sexo"));
+                cliente.setEndereco(rs.getString("enderecoCliente"));
+                cliente.setEmail(rs.getString("emailCliente"));
+                cliente.setDataNasc(rs.getString("dt_nascimentoCliente"));
+                clientes.add(cliente);
+            }
+        } catch (Exception ex) {
+            Logger.getLogger(ClienteDao.class.getName())
+                    .log(Level.SEVERE, null, ex);
+        } finally {
+            Conexao.closeConnection(con, stmt, rs);
+        }
+        return clientes;
+    }
+    
     public List<MultaBean> readTableMulta() {
         PreparedStatement stmt = null;
         ResultSet rs = null;

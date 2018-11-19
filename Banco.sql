@@ -7,7 +7,7 @@ nomeCliente varchar(100),
 telefoneCliente varchar(30),
 emailCliente varchar(60), 
 enderecoCliente varchar(50),
-cpfCliente varchar(50),
+cpfCliente varchar(20),
 sexo varchar(10),
 dt_nascimentoCliente varchar(10)
 );
