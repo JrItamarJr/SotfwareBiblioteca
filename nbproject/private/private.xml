@@ -3,14 +3,16 @@
     <editor-bookmarks xmlns="http://www.netbeans.org/ns/editor-bookmarks/2" lastBookmarkId="0"/>
     <open-files xmlns="http://www.netbeans.org/ns/projectui-open-files/2">
         <group>
-            <file>file:/D:/Faculdade/Biblioteca/src/model/Dao/ClienteDao.java</file>
-            <file>file:/D:/Faculdade/Biblioteca/nbproject/build-impl.xml</file>
             <file>file:/D:/Faculdade/Biblioteca/src/view/JICliente.java</file>
+            <file>file:/D:/Faculdade/Biblioteca/src/view/JILivro.java</file>
             <file>file:/D:/Faculdade/Biblioteca/src/view/JIMulta.java</file>
             <file>file:/D:/Faculdade/Biblioteca/src/model/Bean/MultaBean.java</file>
+            <file>file:/D:/Faculdade/Biblioteca/src/view/JFPagar.java</file>
+            <file>file:/D:/Faculdade/Biblioteca/src/model/DAO/ClienteDao.java</file>
             <file>file:/D:/Faculdade/Biblioteca/src/view/JIEmprestimo.java</file>
-            <file>file:/D:/Faculdade/Biblioteca/src/model/Dao/MultaDao.java</file>
-            <file>file:/D:/Faculdade/Biblioteca/src/utils/BdMulta.java</file>
+            <file>file:/D:/Faculdade/Biblioteca/src/model/DAO/EmprestimoDao.java</file>
+            <file>file:/D:/Faculdade/Biblioteca/src/model/DAO/MultaDao.java</file>
+            <file>file:/D:/Faculdade/Biblioteca/src/model/DAO/LivrosDao.java</file>
         </group>
     </open-files>
 </project-private>
