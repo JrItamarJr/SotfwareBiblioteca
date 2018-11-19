@@ -168,9 +168,7 @@ public class MultaDao {
             // executar esse sql
             stmt.executeUpdate();
 
-            JOptionPane.showMessageDialog(null, "Multa recebida com sucesso!");
         } catch (Exception ex) {
-            JOptionPane.showMessageDialog(null, "Erro ao excluir" + ex);
         } finally {
             Conexao.closeConnection(con, stmt);
         }

@@ -359,24 +359,26 @@ public class JILivro extends javax.swing.JInternalFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisarActionPerformed
-        // Ao clicar em pesquisar, é executado o método que efetua a pesquisa, e outro método que exibe a lista da pesquisa
-//        try {
-//            listaContatos();
-//        } catch (SQLException ex) {
-//            JOptionPane.showMessageDialog(rootPane, "Problemas ao listar contatos.");
-//        }
+        readTableForDesc(txtnome.getText());
     }//GEN-LAST:event_jBPesquisarActionPerformed
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
-        if(jTablePesquisa.getSelectedRow() != -1){
+        if (jTablePesquisa.getSelectedRow() != -1) {
             LivroBean liv = new LivroBean();
             LivrosDao livDAO = new LivrosDao();
-            liv.setId((int) jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(),0));
+            liv.setId((int) jTablePesquisa.getValueAt(jTablePesquisa.getSelectedRow(), 0));
             livDAO.delete(liv);
             readTable();
+            desabilitaCampos();
+            txtano.setText("");
+            txtautor.setText("");
+            txtdisponiblidade.setText("");
+            txtedicao.setText("");
+            txtexemplar.setText("");
+            txtid.setText("");
         }
-        
-        
+
+
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
@@ -388,14 +390,14 @@ public class JILivro extends javax.swing.JInternalFrame {
             liv.setDisponibilidade(txtdisponiblidade.getText());
             liv.setEdicao(Integer.parseInt(txtedicao.getText()));
             liv.setExemplar(txtexemplar.getText());
-            liv.setId(Integer.parseInt(txtid.getText()));
+            //liv.setId(Integer.parseInt(txtid.getText()));
             livDAO.update(liv);
             readTable();
         }
     }//GEN-LAST:event_jBAlterarActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
-
+        habilitaCampos();
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
@@ -507,21 +509,24 @@ public void readTable() {
 
     // Desabilita os campos do formulário
     private void desabilitaCampos() {
-//        txtNome.setEnabled(false);
-//        txtCPF.setEnabled(false);
-//        txtEndereco.setEnabled(false);
-//        txtFone.setEnabled(false);
-//        cbSexo.setEnabled(false);
+        txtano.setEnabled(false);
+        txtautor.setEnabled(false);
+        txtdisponiblidade.setEnabled(false);
+        txtedicao.setEnabled(false);
+        txtexemplar.setEnabled(false);
+        txtid.setEnabled(false);
+        txtnome.setEnabled(false);
     }
 
     // Habilita os campos do formulário
     private void habilitaCampos() {
 
-//        txtNome.setEnabled(true);
-//        txtCPF.setEnabled(true);
-//        txtEndereco.setEnabled(true);
-//        txtFone.setEnabled(true);
-//        cbSexo.setEnabled(true);
+        txtano.setEnabled(true);
+        txtautor.setEnabled(true);
+        txtdisponiblidade.setEnabled(true);
+        txtedicao.setEnabled(true);
+        txtexemplar.setEnabled(true);
+        txtnome.setEnabled(true);
     }
 
 }

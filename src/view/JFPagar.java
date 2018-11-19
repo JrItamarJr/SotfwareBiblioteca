@@ -18,13 +18,14 @@ public class JFPagar extends javax.swing.JFrame {
     /**
      * Creates new form JFPagar
      */
-    int iIDMulta;
+    double dValor;
 
-    public JFPagar(String sValor, int iID) {
+    public JFPagar(String sValor) {
         initComponents();
         txtRecebido.requestFocus();
         txtValor.setText(sValor);
-        iID = iIDMulta;
+        
+        dValor = Double.parseDouble(sValor);
     }
 
     private JFPagar() {
@@ -142,10 +143,7 @@ public class JFPagar extends javax.swing.JFrame {
     }// </editor-fold>//GEN-END:initComponents
 
     private void btnConfirmarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnConfirmarActionPerformed
-        MultaBean multaBean = new MultaBean();
-        MultaDao multaDao = new MultaDao();
-        multaBean.setIdMulta(iIDMulta);
-        multaDao.pagar(multaBean);//metódo para executar o delete
+        JOptionPane.showMessageDialog(null, "Multa recebida com sucesso!");
         this.dispose();
     }//GEN-LAST:event_btnConfirmarActionPerformed
 
@@ -154,10 +152,10 @@ public class JFPagar extends javax.swing.JFrame {
     }//GEN-LAST:event_btnCancelarActionPerformed
 
     private void txtRecebidoKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtRecebidoKeyReleased
-        int iValorRecebido = Integer.parseInt(txtRecebido.getText());
-        int troco = iValorRecebido - iIDMulta;
+        double dValorRecebido = Double.parseDouble(txtRecebido.getText());
+        double dTroco =  dValorRecebido - dValor;
         
-        txtTroco.setText(String.valueOf(troco));
+        txtTroco.setText(String.valueOf(dTroco));
     }//GEN-LAST:event_txtRecebidoKeyReleased
 
     /**

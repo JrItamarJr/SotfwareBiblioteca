@@ -414,7 +414,7 @@
               <Group type="102" alignment="0" attributes="0">
                   <EmptySpace max="-2" attributes="0"/>
                   <Group type="103" groupAlignment="0" attributes="0">
-                      <Component id="jBAlterar" alignment="0" max="32767" attributes="0"/>
+                      <Component id="btnPagar" alignment="0" max="32767" attributes="0"/>
                       <Component id="jBNovo" alignment="0" max="32767" attributes="0"/>
                       <Component id="jBCadastrar" alignment="0" pref="111" max="32767" attributes="0"/>
                       <Component id="jBSair" alignment="0" max="32767" attributes="0"/>
@@ -430,7 +430,7 @@
                   <EmptySpace max="-2" attributes="0"/>
                   <Component id="jBExcluir" min="-2" pref="33" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
-                  <Component id="jBAlterar" min="-2" pref="33" max="-2" attributes="0"/>
+                  <Component id="btnPagar" min="-2" pref="33" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
                   <Component id="jBNovo" min="-2" pref="33" max="-2" attributes="0"/>
                   <EmptySpace type="unrelated" max="-2" attributes="0"/>
@@ -454,7 +454,7 @@
             <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBExcluirActionPerformed"/>
           </Events>
         </Component>
-        <Component class="javax.swing.JButton" name="jBAlterar">
+        <Component class="javax.swing.JButton" name="btnPagar">
           <Properties>
             <Property name="font" type="java.awt.Font" editor="org.netbeans.beaninfo.editors.FontEditor">
               <Font name="Century Gothic" size="12" style="1"/>
@@ -462,7 +462,7 @@
             <Property name="text" type="java.lang.String" value="Pagar"/>
           </Properties>
           <Events>
-            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="jBAlterarActionPerformed"/>
+            <EventHandler event="actionPerformed" listener="java.awt.event.ActionListener" parameters="java.awt.event.ActionEvent" handler="btnPagarActionPerformed"/>
           </Events>
         </Component>
         <Component class="javax.swing.JButton" name="jBNovo">

@@ -19,7 +19,7 @@ public class JIMulta extends javax.swing.JInternalFrame {
         desabilitaCampos();
         cbDescricao.setSelectedIndex(-1);
         txtPesquisa.requestFocus();
-        if(txtPesquisa.requestFocus(true) == true){
+        if (txtPesquisa.requestFocus(true) == true) {
             readTableMulta();
         }
     }
@@ -49,7 +49,7 @@ public class JIMulta extends javax.swing.JInternalFrame {
         cbDescricao = new javax.swing.JComboBox();
         jPanel3 = new javax.swing.JPanel();
         jBExcluir = new javax.swing.JButton();
-        jBAlterar = new javax.swing.JButton();
+        btnPagar = new javax.swing.JButton();
         jBNovo = new javax.swing.JButton();
         jBCadastrar = new javax.swing.JButton();
         jBSair = new javax.swing.JButton();
@@ -237,11 +237,11 @@ public class JIMulta extends javax.swing.JInternalFrame {
             }
         });
 
-        jBAlterar.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
-        jBAlterar.setText("Pagar");
-        jBAlterar.addActionListener(new java.awt.event.ActionListener() {
+        btnPagar.setFont(new java.awt.Font("Century Gothic", 1, 12)); // NOI18N
+        btnPagar.setText("Pagar");
+        btnPagar.addActionListener(new java.awt.event.ActionListener() {
             public void actionPerformed(java.awt.event.ActionEvent evt) {
-                jBAlterarActionPerformed(evt);
+                btnPagarActionPerformed(evt);
             }
         });
 
@@ -276,7 +276,7 @@ public class JIMulta extends javax.swing.JInternalFrame {
             .addGroup(jPanel3Layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(jPanel3Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-                    .addComponent(jBAlterar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(btnPagar, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBNovo, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                     .addComponent(jBCadastrar, javax.swing.GroupLayout.DEFAULT_SIZE, 111, Short.MAX_VALUE)
                     .addComponent(jBSair, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
@@ -289,7 +289,7 @@ public class JIMulta extends javax.swing.JInternalFrame {
                 .addContainerGap()
                 .addComponent(jBExcluir, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
-                .addComponent(jBAlterar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
+                .addComponent(btnPagar, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
                 .addComponent(jBNovo, javax.swing.GroupLayout.PREFERRED_SIZE, 33, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.UNRELATED)
@@ -350,7 +350,7 @@ public class JIMulta extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBPesquisarActionPerformed
 
     private void jTableMultaMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableMultaMouseClicked
-int linhaSelecionada = jTableMulta.getSelectedRow();
+        int linhaSelecionada = jTableMulta.getSelectedRow();
 
         txtValor.setText(jTableMulta.getValueAt(linhaSelecionada, 3).toString());
     }//GEN-LAST:event_jTableMultaMouseClicked
@@ -384,13 +384,19 @@ int linhaSelecionada = jTableMulta.getSelectedRow();
         }
     }//GEN-LAST:event_jBExcluirActionPerformed
 
-    private void jBAlterarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBAlterarActionPerformed
+    private void btnPagarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_btnPagarActionPerformed
         if (jTableMulta.getSelectedRow() != -1) {
-            String sID = (jTableMulta.getValueAt(jTableMulta.getSelectedRow(), 0).toString());
-            JFPagar jfPagar = new JFPagar(txtValor.getText(),Integer.parseInt(sID));
+            int iID = ((int) jTableMulta.getValueAt(jTableMulta.getSelectedRow(), 0));
+            JFPagar jfPagar = new JFPagar(txtValor.getText());
             jfPagar.show();
+            MultaBean multaBean = new MultaBean();
+            MultaDao multaDao = new MultaDao();
+            multaBean.setIdMulta(iID);
+            multaDao.pagar(multaBean);//metódo para executar o delete
+            readTableMulta();
+
         }
-    }//GEN-LAST:event_jBAlterarActionPerformed
+    }//GEN-LAST:event_btnPagarActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
         habilitaCampos();
@@ -447,8 +453,8 @@ int linhaSelecionada = jTableMulta.getSelectedRow();
     /* <-OUTROS---- */
 
     // Variables declaration - do not modify//GEN-BEGIN:variables
+    private javax.swing.JButton btnPagar;
     private javax.swing.JComboBox cbDescricao;
-    private javax.swing.JButton jBAlterar;
     private javax.swing.JButton jBCadastrar;
     private javax.swing.JButton jBExcluir;
     private javax.swing.JButton jBNovo;

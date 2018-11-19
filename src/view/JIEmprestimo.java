@@ -5,16 +5,17 @@
  */
 package view;
 
-
 import javax.swing.JOptionPane;
 import javax.swing.table.DefaultTableModel;
 import javax.swing.table.TableRowSorter;
 import Model.Bean.ClienteBean;
 import Model.Bean.EmprestimoBean;
 import Model.Bean.LivroBean;
+import Model.Bean.MultaBean;
 import model.DAO.ClienteDao;
 import model.DAO.EmprestimoDao;
 import model.DAO.LivrosDao;
+import model.DAO.MultaDao;
 
 /**
  *
@@ -29,16 +30,16 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
         initComponents();
         DefaultTableModel modelo = (DefaultTableModel) jTableEmprestimo.getModel();
         jTableEmprestimo.setRowSorter(new TableRowSorter(modelo));
-        readTable();
+        readTableEmprestimo();
         DefaultTableModel modelocliente = (DefaultTableModel) jTableCliente.getModel();
         jTableCliente.setRowSorter(new TableRowSorter(modelocliente));
         readTableClientes();
         DefaultTableModel modelolivro = (DefaultTableModel) jTableLivro.getModel();
         jTableLivro.setRowSorter(new TableRowSorter(modelolivro));
         readTableLivros();
-        
+
     }
-    
+
     /**
      * This method is called from within the constructor to initialize the form.
      * WARNING: Do NOT modify this code. The content of this method is always
@@ -400,14 +401,13 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
             jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
             .addGroup(jPanel2Layout.createSequentialGroup()
                 .addContainerGap()
-                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.TRAILING)
-                    .addGroup(jPanel2Layout.createSequentialGroup()
-                        .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
-                            .addComponent(jLabel6)
-                            .addComponent(jRClientes)
-                            .addComponent(jRLivros))
-                        .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
-                        .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE))
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(jLabel6)
+                    .addComponent(jRClientes)
+                    .addComponent(jRLivros))
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
+                .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
+                    .addComponent(txtbuscar, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                     .addComponent(jBPesquisar))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addGroup(jPanel2Layout.createParallelGroup(javax.swing.GroupLayout.Alignment.BASELINE)
@@ -521,20 +521,27 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
             .addGroup(layout.createSequentialGroup()
                 .addContainerGap()
                 .addGroup(layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING, false)
-                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
-                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                    .addComponent(jPanel2, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                    .addComponent(jPanel5, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel1, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
                 .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED)
                 .addComponent(jPanel6, javax.swing.GroupLayout.PREFERRED_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.PREFERRED_SIZE)
-                .addContainerGap(javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE))
+                .addContainerGap(12, Short.MAX_VALUE))
         );
 
         pack();
     }// </editor-fold>//GEN-END:initComponents
 
     private void jBPesquisarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBPesquisarActionPerformed
-       
+        if (jRClientes.isSelected()) {
+            readTableForDescClientes(txtbuscar.getText());
+        } else if (jRLivros.isSelected()) {
+            readTableForDescLivros(txtbuscar.getText());
+        } else {
+            JOptionPane.showMessageDialog(null, "Por favor selecione uma das opçoes para realizar a busca");
+            txtbuscar.setText("");
+        }
     }//GEN-LAST:event_jBPesquisarActionPerformed
 
     private void jTableEmprestimoMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableEmprestimoMouseClicked
@@ -542,23 +549,23 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jTableEmprestimoMouseClicked
 
     private void jTableLivroMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableLivroMouseClicked
-      if(jTableLivro.getSelectedRow() != -1){
+        if (jTableLivro.getSelectedRow() != -1) {
             txtLivroID.setText(jTableLivro.getValueAt(jTableLivro.getSelectedRow(), 0).toString());
         }
     }//GEN-LAST:event_jTableLivroMouseClicked
 
     private void jTableClienteMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jTableClienteMouseClicked
-        if(jTableCliente.getSelectedRow() != -1){
+        if (jTableCliente.getSelectedRow() != -1) {
             txtClienteID.setText(jTableCliente.getValueAt(jTableCliente.getSelectedRow(), 0).toString());
         }
     }//GEN-LAST:event_jTableClienteMouseClicked
 
     private void jBExcluirActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBExcluirActionPerformed
-       
+
     }//GEN-LAST:event_jBExcluirActionPerformed
 
     private void jBNovoActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovoActionPerformed
-     
+
     }//GEN-LAST:event_jBNovoActionPerformed
 
     private void jBSairActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSairActionPerformed
@@ -566,19 +573,19 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSairActionPerformed
 
     private void jBCadastrarActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrarActionPerformed
-       
+
     }//GEN-LAST:event_jBCadastrarActionPerformed
 
     private void jBDevolverMouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBDevolverMouseClicked
-       
+
     }//GEN-LAST:event_jBDevolverMouseClicked
 
     private void jBDevolver1MouseClicked(java.awt.event.MouseEvent evt) {//GEN-FIRST:event_jBDevolver1MouseClicked
-       
+
     }//GEN-LAST:event_jBDevolver1MouseClicked
 
     private void jBNovo1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBNovo1ActionPerformed
-        
+
     }//GEN-LAST:event_jBNovo1ActionPerformed
 
     private void jBCadastrar1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBCadastrar1ActionPerformed
@@ -588,9 +595,9 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
         emp.setId_livro(Integer.parseInt(txtLivroID.getText()));
         emp.setData_emprestimo(txtDataSaida.getText());
         emp.setData_devolucao(txtDataEntrada.getText());
-        
+
         empDAO.create(emp);
-        readTable();
+        readTableEmprestimo();
     }//GEN-LAST:event_jBCadastrar1ActionPerformed
 
     private void jBSair1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBSair1ActionPerformed
@@ -598,19 +605,25 @@ public class JIEmprestimo extends javax.swing.JInternalFrame {
     }//GEN-LAST:event_jBSair1ActionPerformed
 
     private void jBDevolver1ActionPerformed(java.awt.event.ActionEvent evt) {//GEN-FIRST:event_jBDevolver1ActionPerformed
-        // TODO add your handling code here:
-        
+        if (jTableEmprestimo.getSelectedRow() != -1) {
+            int iID = ((int) jTableEmprestimo.getValueAt(jTableEmprestimo.getSelectedRow(), 0));
+            EmprestimoBean emprestimoBean = new EmprestimoBean();
+            EmprestimoDao emprestimoDao = new EmprestimoDao();
+
+            emprestimoBean.setId_emprestimo(iID);
+            emprestimoDao.delete(emprestimoBean);//metódo para executar o delete
+            readTableEmprestimo();
+        }
+
     }//GEN-LAST:event_jBDevolver1ActionPerformed
 
     private void txtbuscarKeyReleased(java.awt.event.KeyEvent evt) {//GEN-FIRST:event_txtbuscarKeyReleased
         // TODO add your handling code here:
-        if(jRClientes.isSelected()){
+        if (jRClientes.isSelected()) {
             readTableForDescClientes(txtbuscar.getText());
-        }
-        if(jRLivros.isSelected()){
+        } else if (jRLivros.isSelected()) {
             readTableForDescLivros(txtbuscar.getText());
-        }
-        else{
+        } else {
             JOptionPane.showMessageDialog(null, "Por favor selecione uma das opçoes para realizar a busca");
             txtbuscar.setText("");
         }
@@ -683,7 +696,8 @@ public void readTableLivros() {
             });
         }
     }
-public void readTableClientes() {
+
+    public void readTableClientes() {
         DefaultTableModel modelocliente = (DefaultTableModel) jTableCliente.getModel();
         modelocliente.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
@@ -711,7 +725,8 @@ public void readTableClientes() {
             });
         }
     }
-    public void readTable() {
+
+    public void readTableEmprestimo() {
         DefaultTableModel modelo = (DefaultTableModel) jTableEmprestimo.getModel();
         modelo.setNumRows(0);// está definindo que no início não dará nenhum registro
         //metodos para preencher as tabelas
